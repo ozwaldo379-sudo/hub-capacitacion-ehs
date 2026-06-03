@@ -429,8 +429,28 @@
   </div>
 
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const participantId = urlParams.get('participantId') || 'ING-001';
+    // Get query parameters and handle standalone mode
+    let participantId = new URLSearchParams(window.location.search).get('participantId');
+    if (!participantId && window.parent === window) {
+      const nombre = prompt("Ingrese su nombre completo para registrar la actividad:");
+      if (nombre && nombre.trim() !== '') {
+        participantId = "EXT-" + Date.now().toString().slice(-6);
+        const raw = localStorage.getItem('ehs_training_state');
+        let state = raw ? JSON.parse(raw) : { participants: [] };
+        state.participants.push({
+          id: participantId, nombre: nombre, email: '',
+          dia1_completado: false, dia1_progreso: 0, dia2_completado: false, dia2_progreso: 0,
+          simulador_riesgos_score: 0, dinamica_epp_score: 0, simulador_arnes_score: 0,
+          dinamica_investigacion_score: 0, dinamica_liderazgo_score: 0, rol_play_supervisor_score: 0,
+          examen_pendiente: true, examen_score: null, examen_aprobado: null, notas_facilitador: ''
+        });
+        localStorage.setItem('ehs_training_state', JSON.stringify(state));
+      } else {
+        participantId = 'ING-001';
+      }
+    } else if (!participantId) {
+      participantId = 'ING-001';
+    }
 
     const causeItems = [
       { id: 'cause-1', text: "Operario omitió conectar eslinga a la línea de vida", bone: 1 },
@@ -596,7 +616,7 @@
         sel.style.borderColor = isRight ? "var(--success)" : "var(--error)";
       });
       
-      // Save to hub state via window.parent
+      // Save to hub state via window.parent or standalone LocalStorage
       if (window.parent && window.parent.participantManager) {
         window.parent.participantManager.actualizarProgreso(participantId, 'investigacion', totalScore);
         if (window.parent.app && window.parent.app.showToast) {
@@ -606,7 +626,24 @@
           });
         }
       } else {
-        alert(`Offline Mode: Score calculated is ${totalScore}/100. (Ishikawa: ${ishikawaCorrect}/8, Whys: ${whysCorrect}/5 correct)`);
+        try {
+          const raw = localStorage.getItem('ehs_training_state');
+          if (raw) {
+            let state = JSON.parse(raw);
+            let p = state.participants.find(p => p.id === participantId);
+            if (p) {
+              p.dinamica_investigacion_score = totalScore;
+              localStorage.setItem('ehs_training_state', JSON.stringify(state));
+              alert(`¡Actividad Completada!\nPuntaje guardado exitosamente: ${totalScore}/100.\nYa puede cerrar esta pestaña.`);
+            } else {
+              alert(`Offline Mode: Score calculated is ${totalScore}/100.`);
+            }
+          } else {
+            alert(`Offline Mode: Score calculated is ${totalScore}/100.`);
+          }
+        } catch (e) {
+          alert(`Offline Mode: Score calculated is ${totalScore}/100.`);
+        }
       }
 
       document.getElementById("btn-submit").disabled = true;

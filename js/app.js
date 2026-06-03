@@ -367,6 +367,21 @@ const app = {
     }
   },
 
+  // Genera el enlace standalone para WhatsApp y lo copia al portapapeles
+  copyStandaloneLink(path) {
+    const selectedId = document.getElementById('console-active-engineer-select').value;
+    const origin = window.location.origin;
+    const pathname = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+    const fullUrl = `${origin}${pathname}${path}?participantId=${selectedId}`;
+    
+    navigator.clipboard.writeText(fullUrl).then(() => {
+      this.showToast({ type: 'success', message: '¡Enlace directo copiado al portapapeles!' });
+    }).catch(err => {
+      console.error('Error copiando al portapapeles: ', err);
+      prompt("Su navegador no soporta copiado automático. Copie este enlace manualmente:", fullUrl);
+    });
+  },
+
   // Toast System
   showToast({ type = 'info', message = '', duration = 4000 }) {
     const container = document.getElementById('toast-container');
