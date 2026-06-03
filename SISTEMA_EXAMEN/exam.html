@@ -1,0 +1,2473 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Evaluación Adaptativa Inmersiva | Vértice EHS</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- CDN Scripts for PDF and Canvas Rendering -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  
+  <style>
+    /* ==================== VARIABLE SYSTEM (DARK MODE DEFAULT) ==================== */
+    :root {
+      --navy-darkest: #04080e;
+      --navy-dark: #091322;
+      --navy: #122543;
+      --navy-mid: #1B365D;
+      --navy-light: #2c4a75;
+      
+      --green: #2E8B57;
+      --green-light: #3aaf6d;
+      --green-dark: #1e5a38;
+      
+      --gold: #C9A961;
+      --gold-light: #dfc07a;
+      --gold-dim: rgba(201, 169, 97, 0.12);
+      
+      --white: #ffffff;
+      --off-white: #f0f4f8;
+      --muted: #8fa3bc;
+      --border: rgba(255, 255, 255, 0.07);
+      
+      --red: #e05252;
+      --red-dim: rgba(224, 82, 82, 0.12);
+      --amber: #e09652;
+      --blue: #5b9bd5;
+      --purple: #9b59b6;
+      --purple-light: #c39bd3;
+      --glass: rgba(13, 31, 53, 0.65);
+      --font-main: 'Barlow', sans-serif;
+      --font-title: 'Playfair Display', serif;
+      --font-cond: 'Barlow Condensed', sans-serif;
+    }
+
+    /* ==================== LIGHT MODE OVERRIDES ==================== */
+    body.light-mode {
+      --navy-darkest: #f4f7fa;
+      --navy-dark: #e1e6eb;
+      --navy: #cfd8e3;
+      --navy-mid: #1B365D;
+      --navy-light: #4a6fa5;
+      --white: #122543;
+      --off-white: #1b365d;
+      --muted: #5a6e85;
+      --border: rgba(18, 37, 67, 0.1);
+      --glass: rgba(225, 230, 235, 0.85);
+    }
+
+    /* ==================== GLOBAL STYLES ==================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    html, body {
+      min-height: 100%;
+      background: var(--navy-darkest);
+      color: var(--white);
+      font-family: var(--font-main);
+      overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body {
+      position: relative;
+      padding-bottom: 60px;
+    }
+
+    /* Dynamic Orbs background effects */
+    .bg-dots {
+      position: fixed;
+      inset: 0;
+      opacity: .025;
+      background-image: radial-gradient(circle at 1px 1px, var(--white) 1px, transparent 0);
+      background-size: 30px 30px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .orb {
+      position: fixed;
+      border-radius: 999px;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.45;
+    }
+    .orb.green { width: 400px; height: 400px; left: -100px; bottom: -100px; background: radial-gradient(circle, rgba(46,139,87,.22), transparent 70%); }
+    .orb.gold { width: 350px; height: 350px; right: -100px; top: -100px; background: radial-gradient(circle, rgba(201,169,97,.14), transparent 70%); }
+    .orb.purple { width: 500px; height: 500px; left: 35%; top: -150px; background: radial-gradient(circle, rgba(155,89,182,.15), transparent 70%); }
+    .orb.blue { width: 300px; height: 300px; right: 20%; bottom: -100px; background: radial-gradient(circle, rgba(91,155,213,.12), transparent 70%); }
+
+    /* ==================== INTERFACE FLOATING ACTIONS ==================== */
+    .floating-theme-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--navy-mid);
+      border: 1px solid var(--gold);
+      color: var(--gold-light);
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .floating-theme-btn:hover {
+      transform: scale(1.1);
+      background: var(--navy-light);
+    }
+
+    /* ==================== HEADER SYSTEM ==================== */
+    .exam-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(4, 8, 14, 0.85);
+      border-bottom: 2px solid var(--gold);
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    body.light-mode .exam-header {
+      background: rgba(225, 230, 235, 0.85);
+    }
+    .header-logo h1 {
+      font-family: var(--font-title);
+      font-size: 24px;
+      color: var(--gold-light);
+      font-weight: 900;
+    }
+    .header-logo p {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+    .header-meta {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .timer-wrap {
+      text-align: right;
+    }
+    .timer-label {
+      font-family: var(--font-cond);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .timer {
+      font-family: var(--font-cond);
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+    }
+    .timer.warning { color: var(--amber); animation: pulse 1s infinite; }
+    .timer.critical { color: var(--red); animation: pulse 0.5s infinite; }
+
+    /* Engine adaptive badge */
+    .engine-status {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-cond);
+      font-size: 14px;
+    }
+    .engine-label { color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+    
+    .difficulty-badge {
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 1.5px;
+      transition: all 0.3s;
+    }
+    .diff-facil { background: rgba(46,139,87,.2); color: var(--green-light); border: 1px solid rgba(46,139,87,.4); }
+    .diff-medio { background: rgba(91,155,213,.2); color: var(--blue); border: 1px solid rgba(91,155,213,.4); }
+    .diff-dificil { background: rgba(224,150,82,.2); color: var(--amber); border: 1px solid rgba(224,150,82,.4); }
+    .diff-experto { 
+      background: rgba(155,89,182,.2); 
+      color: var(--purple-light); 
+      border: 1px solid rgba(155,89,182,.4);
+      box-shadow: 0 0 10px rgba(155,89,182,0.3);
+      animation: glowPurple 2s infinite alternate;
+    }
+    @keyframes glowPurple {
+      0% { box-shadow: 0 0 5px rgba(155,89,182,0.2); }
+      100% { box-shadow: 0 0 15px rgba(155,89,182,0.5); }
+    }
+
+    /* General Progress bar */
+    .progress-bar-wrap {
+      background: rgba(255,255,255,.05);
+      height: 6px;
+      position: relative;
+      z-index: 10;
+    }
+    body.light-mode .progress-bar-wrap {
+      background: rgba(18,37,67,0.05);
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green-light), var(--gold-light), var(--purple));
+      width: 0%;
+      transition: width .4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .progress-label {
+      position: absolute;
+      right: 20px;
+      top: 8px;
+      font-family: var(--font-cond);
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      z-index: 10;
+    }
+
+    /* ==================== CORE CONTENT CONTAINERS ==================== */
+    .exam-body {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .glass-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 40px;
+      box-shadow: 0 20px 50px rgba(0,0,0,.3);
+      backdrop-filter: blur(12px);
+      animation: fadeUp .5s cubic-bezier(0.1, 0.9, 0.2, 1) both;
+    }
+    body.light-mode .glass-card {
+      box-shadow: 0 15px 35px rgba(18, 37, 67, 0.08);
+    }
+    .hidden { display: none !important; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
+
+    /* ==================== SCREEN 1: START EVALUATION ==================== */
+    #screen-start {
+      text-align: center;
+    }
+    .badge-eval {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(201,169,97,.45);
+      background: var(--gold-dim);
+      color: var(--gold-light);
+      font-family: var(--font-cond);
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      border-radius: 999px;
+      padding: 6px 18px;
+      margin-bottom: 20px;
+    }
+    #screen-start h2 {
+      font-family: var(--font-title);
+      font-size: 40px;
+      margin-bottom: 12px;
+      font-weight: 900;
+    }
+    #screen-start .sub {
+      font-size: 18px;
+      color: var(--muted);
+      margin-bottom: 40px;
+      font-weight: 300;
+    }
+    .setup-box {
+      max-width: 480px;
+      margin: 0 auto 36px;
+      text-align: left;
+    }
+    .setup-box label {
+      display: block;
+      font-family: var(--font-cond);
+      font-size: 13px;
+      color: var(--gold-light);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+    .select-engineer {
+      width: 100%;
+      background: var(--navy-mid);
+      border: 1px solid var(--border);
+      color: var(--white);
+      padding: 14px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      outline: none;
+      font-family: var(--font-main);
+      cursor: pointer;
+      margin-bottom: 16px;
+      transition: border-color .3s, background 0.3s;
+    }
+    .select-engineer:focus { border-color: var(--gold-light); }
+    
+    .manual-profile-box {
+      border-top: 1px dashed var(--border);
+      padding-top: 16px;
+      animation: fadeUp 0.3s ease;
+    }
+    .custom-name-input, .custom-score-input {
+      width: 100%;
+      background: rgba(0,0,0,0.18);
+      border: 1px solid var(--border);
+      color: var(--white);
+      padding: 12px 18px;
+      font-size: 15px;
+      border-radius: 8px;
+      outline: none;
+      font-family: var(--font-main);
+      margin-bottom: 14px;
+      transition: border-color .3s;
+    }
+    body.light-mode .custom-name-input, body.light-mode .custom-score-input {
+      background: rgba(255,255,255,0.7);
+    }
+    .custom-name-input:focus, .custom-score-input:focus { border-color: var(--gold-light); }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      max-width: 800px;
+      margin: 0 auto 40px;
+      text-align: left;
+    }
+    .info-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      border-left: 4px solid var(--gold);
+    }
+    .info-card.ehs { border-left-color: var(--purple); }
+    .info-card .num {
+      font-family: var(--font-cond);
+      font-size: 28px;
+      color: var(--gold-light);
+      font-weight: 800;
+    }
+    .info-card.ehs .num { color: var(--purple-light); }
+    .info-card .lbl {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    
+    .btn-start {
+      font-family: var(--font-cond);
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      padding: 16px 50px;
+      background: linear-gradient(90deg, var(--green), var(--gold));
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(46,139,87,.25);
+      transition: all .3s;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+    .btn-start:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(46,139,87,.45);
+    }
+
+    /* ==================== SCREEN 2: ACTIVE QUESTION SCREEN ==================== */
+    .q-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 14px;
+    }
+    .q-module-name {
+      font-family: var(--font-cond);
+      font-size: 14px;
+      color: var(--gold-light);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .q-meta-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .q-category-tag {
+      font-family: var(--font-cond);
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 999px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .cat-alturas { background: rgba(46,139,87,.15); color: var(--green-light); border: 1px solid rgba(46,139,87,.3); }
+    .cat-supervisor { background: rgba(155,89,182,.15); color: var(--purple-light); border: 1px solid rgba(155,89,182,.3); }
+    
+    .flag-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 18px;
+      transition: color 0.2s;
+    }
+    .flag-btn.flagged {
+      color: var(--amber);
+    }
+
+    /* Dynamic question timer count */
+    .q-timer-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-cond);
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .q-timer-bar-bg {
+      width: 100px;
+      height: 6px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .q-timer-bar {
+      height: 100%;
+      background: var(--blue);
+      width: 100%;
+      transition: width 1s linear;
+    }
+    .q-timer-bar.warn { background: var(--amber); }
+    .q-timer-bar.crit { background: var(--red); }
+
+    .q-text {
+      font-size: 21px;
+      line-height: 1.45;
+      color: var(--off-white);
+      margin-bottom: 24px;
+      font-weight: 500;
+    }
+    
+    /* Practical case scenarios styling */
+    .q-scenario {
+      background: rgba(27, 54, 93, 0.35);
+      border: 1px solid rgba(91, 155, 213, 0.25);
+      border-left: 5px solid var(--blue);
+      border-radius: 8px;
+      padding: 18px 24px;
+      margin-bottom: 24px;
+      font-size: 15.5px;
+      color: var(--off-white);
+      line-height: 1.5;
+    }
+    .q-scenario.critico {
+      background: rgba(224, 82, 82, 0.08);
+      border-color: rgba(224, 82, 82, 0.25);
+      border-left-color: var(--red);
+    }
+    .q-scenario .sc-title {
+      font-family: var(--font-cond);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-size: 12px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .q-scenario.critico .sc-title { color: var(--red); }
+
+    /* Multiple choice grid */
+    .options-grid {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+    .option-btn {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px 20px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.02);
+      transition: all .25s ease;
+      text-align: left;
+      width: 100%;
+      outline: none;
+    }
+    .option-btn:hover {
+      border-color: var(--gold-light);
+      background: rgba(201,169,97,.06);
+      transform: translateX(4px);
+    }
+    .option-btn.selected {
+      border-color: var(--gold-light);
+      background: rgba(201,169,97,.12);
+      box-shadow: 0 0 15px rgba(201,169,97,0.15);
+    }
+    .option-btn.correct {
+      border-color: var(--green-light) !important;
+      background: rgba(46,139,87,.14) !important;
+      pointer-events: none;
+      box-shadow: 0 0 15px rgba(46,139,87,0.15);
+    }
+    .option-btn.wrong {
+      border-color: var(--red) !important;
+      background: rgba(224,82,82,.14) !important;
+      pointer-events: none;
+      box-shadow: 0 0 15px rgba(224,82,82,0.15);
+    }
+    .option-btn.neutral {
+      opacity: .35;
+      pointer-events: none;
+    }
+    .option-letter {
+      font-family: var(--font-cond);
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--gold-light);
+      min-width: 24px;
+      line-height: 1;
+      padding-top: 1px;
+    }
+    .option-btn.correct .option-letter { color: var(--green-light); }
+    .option-btn.wrong .option-letter { color: var(--red); }
+    .option-text {
+      font-size: 16px;
+      color: var(--off-white);
+      line-height: 1.45;
+    }
+
+    /* Ordering draggable lists styles */
+    .order-list {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .order-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 20px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      cursor: grab;
+      user-select: none;
+      transition: all .2s;
+    }
+    .order-item:active { cursor: grabbing; border-color: var(--gold-light); }
+    .order-item.dragging { opacity: .4; border-style: dashed; }
+    .order-item .handle { font-size: 20px; color: var(--muted); cursor: grab; }
+    .order-item .step-num {
+      font-family: var(--font-cond);
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--gold-light);
+      min-width: 28px;
+      text-align: center;
+    }
+    .order-item-text { font-size: 15.5px; color: var(--off-white); flex: 1; }
+    .order-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .order-btn-move {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: var(--white);
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .2s;
+    }
+    .order-btn-move:hover { background: rgba(255,255,255,0.15); }
+    .order-action-area {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .order-check-btn {
+      padding: 12px 30px;
+      font-family: var(--font-cond);
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, var(--navy-mid), var(--navy-light));
+      color: var(--gold-light);
+      border: 1px solid rgba(201,169,97,.35);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .order-check-btn:hover {
+      background: linear-gradient(90deg, var(--navy-light), var(--navy-mid));
+      border-color: var(--gold-light);
+      transform: translateY(-1px);
+    }
+    .order-item.order-correct { border-color: var(--green-light); background: rgba(46,139,87,.08); }
+    .order-item.order-wrong { border-color: var(--red); background: rgba(224,82,82,.08); }
+
+    /* Pedagogical Feedback Panel */
+    .feedback-panel {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 28px;
+      animation: fadeUp .3s ease;
+    }
+    .feedback-panel.correct-box {
+      border: 1px solid rgba(46,139,87,.3);
+      border-left: 5px solid var(--green-light);
+    }
+    .feedback-panel.wrong-box {
+      border: 1px solid rgba(224,82,82,.3);
+      border-left: 5px solid var(--red);
+    }
+    .feedback-title {
+      font-family: var(--font-cond);
+      font-size: 17px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .correct-box .feedback-title { color: var(--green-light); }
+    .wrong-box .feedback-title { color: var(--red); }
+    .feedback-text {
+      font-size: 15px;
+      line-height: 1.45;
+      color: var(--off-white);
+      margin-bottom: 12px;
+    }
+    .feedback-meta {
+      border-top: 1px dashed var(--border);
+      padding-top: 10px;
+      font-size: 12.5px;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .feedback-meta span strong { color: var(--gold-light); }
+
+    .action-row {
+      display: flex;
+      justify-content: flex-end;
+    }
+    .btn-primary {
+      font-family: var(--font-cond);
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 12px 36px;
+      background: linear-gradient(90deg, var(--green), var(--green-light));
+      color: var(--white);
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all .25s;
+      box-shadow: 0 8px 24px rgba(46,139,87,.3);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(46,139,87,.45);
+    }
+    .btn-primary:disabled {
+      opacity: .35;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* ==================== SCREEN 3: RESULTS & DASHBOARD ==================== */
+    .results-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .results-header h2 {
+      font-family: var(--font-title);
+      font-size: 40px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    
+    /* Radial score ring progress */
+    .score-dashboard {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 40px;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+    .score-circle-wrap {
+      display: flex;
+      justify-content: center;
+    }
+    .score-ring {
+      width: 200px;
+      height: 200px;
+      position: relative;
+    }
+    .score-ring svg { transform: rotate(-90deg); }
+    .score-ring .ring-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .score-ring .score-num {
+      font-family: var(--font-title);
+      font-size: 54px;
+      font-weight: 900;
+      color: var(--gold-light);
+      line-height: 1;
+    }
+    .score-ring .score-label {
+      font-family: var(--font-cond);
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    .score-summary-text {
+      font-size: 17.5px;
+      line-height: 1.5;
+      color: var(--off-white);
+    }
+    .score-summary-text strong {
+      color: var(--gold-light);
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .metric-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+    }
+    .metric-card .val {
+      font-family: var(--font-cond);
+      font-size: 32px;
+      font-weight: 800;
+    }
+    .metric-card.corrects .val { color: var(--green-light); }
+    .metric-card.dificultad .val { color: var(--purple-light); }
+    .metric-card.aprobado .val { color: var(--gold-light); }
+    .metric-card.aprobado.repro .val { color: var(--red); }
+    .metric-card .lbl {
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* SVG Trajectory Chart */
+    .chart-section {
+      margin-bottom: 44px;
+    }
+    .section-title-alt {
+      font-family: var(--font-cond);
+      font-size: 15px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 20px;
+      border-left: 3px solid var(--gold);
+      padding-left: 12px;
+    }
+    .chart-container {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      overflow-x: auto;
+    }
+    .chart-axis-lbl {
+      font-family: var(--font-cond);
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* Radar Charts Competency comparison grid */
+    .radars-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 44px;
+    }
+    .radar-box {
+      background: rgba(255,255,255,0.01);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      text-align: center;
+    }
+    .radar-box h3 {
+      font-family: var(--font-cond);
+      font-size: 18px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+    .radar-box.alturas h3 { color: var(--green-light); }
+    .radar-box.supervisor h3 { color: var(--purple-light); }
+    .radar-canvas-wrap {
+      display: flex;
+      justify-content: center;
+      margin: 0 auto;
+    }
+
+    /* 10 Modules Mastery bars */
+    .mastery-section {
+      margin-bottom: 44px;
+    }
+    .mastery-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .mastery-category-box {
+      background: rgba(255,255,255,0.01);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+    }
+    .mastery-category-box h3 {
+      font-family: var(--font-cond);
+      font-size: 18px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      color: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+    .mastery-category-box.alturas h3 { color: var(--green-light); }
+    .mastery-category-box.supervisor h3 { color: var(--purple-light); }
+    .mastery-item {
+      margin-bottom: 16px;
+    }
+    .mastery-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13.5px;
+      margin-bottom: 6px;
+    }
+    .mastery-name { color: var(--off-white); }
+    .mastery-pct { font-weight: 700; color: var(--gold-light); }
+    .mastery-track {
+      background: rgba(255,255,255,0.06);
+      height: 6px;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .mastery-fill {
+      height: 100%;
+      background: var(--gold);
+      border-radius: 3px;
+      width: 0%;
+      transition: width 1s ease;
+    }
+    .mastery-category-box.alturas .mastery-fill { background: var(--green); }
+    .mastery-category-box.supervisor .mastery-fill { background: var(--purple); }
+
+    /* Digital Gold Certificate Card */
+    .cert-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 44px;
+    }
+    .cert-box {
+      background: linear-gradient(160deg, rgba(13, 31, 53, 0.95), rgba(4, 8, 14, 0.98));
+      border: 3px double var(--gold);
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 660px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+      box-sizing: border-box;
+    }
+    .cert-border-corner {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--gold);
+      opacity: 0.7;
+    }
+    .cbc-tl { top: 12px; left: 12px; border-right: none; border-bottom: none; }
+    .cbc-tr { top: 12px; right: 12px; border-left: none; border-bottom: none; }
+    .cbc-bl { bottom: 12px; left: 12px; border-right: none; border-top: none; }
+    .cbc-br { bottom: 12px; right: 12px; border-left: none; border-top: none; }
+    
+    .cert-header {
+      font-family: var(--font-cond);
+      font-size: 12px;
+      color: var(--gold-light);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .cert-title {
+      font-family: var(--font-title);
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .cert-subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    .cert-to {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+    .cert-name {
+      font-family: var(--font-title);
+      font-size: 34px;
+      font-weight: 900;
+      color: var(--gold-light);
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+    .cert-text {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--off-white);
+      max-width: 500px;
+      margin: 0 auto 30px;
+    }
+    .cert-meta-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      border-top: 1px dashed rgba(201,169,97,.2);
+      border-bottom: 1px dashed rgba(201,169,97,.2);
+      padding: 16px 0;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .cert-meta-col {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .cert-meta-col strong {
+      display: block;
+      font-size: 15px;
+      color: var(--white);
+      margin-top: 4px;
+      font-family: var(--font-cond);
+    }
+    .cert-badge {
+      display: inline-flex;
+      align-items: center;
+      background: linear-gradient(90deg, var(--green-dark), var(--green));
+      color: #fff;
+      font-family: var(--font-cond);
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      padding: 8px 24px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    /* Study plan / Failed questions learning section */
+    .failed-review-section {
+      background: rgba(224, 82, 82, 0.05);
+      border: 1px dashed rgba(224, 82, 82, 0.25);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 40px;
+    }
+    .failed-review-section h3 {
+      font-family: var(--font-cond);
+      color: var(--red);
+      font-size: 20px;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+    .failed-review-section p {
+      font-size: 14.5px;
+      color: var(--off-white);
+      margin-bottom: 20px;
+      line-height: 1.45;
+    }
+    .btn-review-failed {
+      font-family: var(--font-cond);
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 10px 24px;
+      background: var(--red);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-review-failed:hover { background: #b03d3d; }
+
+    .results-actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .btn-secondary {
+      font-family: var(--font-cond);
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 12px 30px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--white);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: var(--white);
+    }
+    body.light-mode .btn-secondary:hover {
+      background: rgba(0,0,0,0.05);
+    }
+
+    /* ==================== SCREEN 4: FACILITATOR ADMIN PANEL ==================== */
+    .admin-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+      margin-bottom: 30px;
+    }
+    .admin-title-row h2 {
+      font-family: var(--font-title);
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--gold-light);
+    }
+    .admin-actions-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .admin-btn-action {
+      background: var(--navy-mid);
+      border: 1px solid var(--border);
+      color: var(--white);
+      padding: 8px 16px;
+      font-size: 13px;
+      font-family: var(--font-cond);
+      letter-spacing: 1px;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .admin-btn-action:hover { background: var(--navy-light); }
+    
+    .admin-btn-delete-all {
+      background: rgba(224,82,82,0.1);
+      border: 1px solid rgba(224,82,82,0.3);
+      color: var(--red);
+      padding: 8px 16px;
+      font-size: 13px;
+      font-family: var(--font-cond);
+      letter-spacing: 1px;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .admin-btn-delete-all:hover { background: var(--red); color: #fff; }
+
+    /* Admin Table */
+    .admin-table-container {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 36px;
+    }
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14.5px;
+    }
+    .admin-table th {
+      background: rgba(255,255,255,0.03);
+      padding: 12px 16px;
+      font-family: var(--font-cond);
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: var(--gold-light);
+      border-bottom: 1px solid var(--border);
+    }
+    .admin-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--off-white);
+    }
+    .admin-status-badge {
+      font-size: 11px;
+      font-family: var(--font-cond);
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .admin-status-aprobado { background: rgba(46,139,87,.15); color: var(--green-light); border: 1px solid rgba(46,139,87,.3); }
+    .admin-status-reforzar { background: rgba(224,82,82,.15); color: var(--red); border: 1px solid rgba(224,82,82,.3); }
+    
+    .admin-warn-badge {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .admin-warn-badge.crit {
+      color: var(--red);
+      font-weight: bold;
+    }
+    
+    .admin-btn-delete {
+      background: none;
+      border: none;
+      color: var(--red);
+      cursor: pointer;
+      font-size: 14px;
+      margin-left: 8px;
+    }
+    .admin-btn-delete:hover { color: #fff; }
+
+    /* ==================== SECURITY ALERTS & MODALS ==================== */
+    .sec-warning-banner {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--red);
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      z-index: 9999;
+      animation: bounceIn 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    @keyframes bounceIn {
+      0% { transform: translate(-50%, -50px); opacity: 0; }
+      100% { transform: translate(-50%, 0); opacity: 1; }
+    }
+
+    /* Modal dialog */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(4,8,14,0.85);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(8px);
+    }
+    .modal-box {
+      background: var(--navy-dark);
+      border: 1px solid var(--gold);
+      border-radius: 12px;
+      max-width: 480px;
+      width: 100%;
+      padding: 30px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      text-align: center;
+    }
+    .modal-box h3 {
+      font-family: var(--font-title);
+      font-size: 24px;
+      margin-bottom: 12px;
+      color: var(--gold-light);
+    }
+    .modal-box p {
+      font-size: 15px;
+      line-height: 1.45;
+      color: var(--off-white);
+      margin-bottom: 24px;
+    }
+    .modal-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+    .modal-input {
+      width: 100%;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--border);
+      color: var(--white);
+      padding: 12px 18px;
+      font-size: 15px;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 20px;
+      outline: none;
+    }
+    .modal-input:focus { border-color: var(--gold-light); }
+  </style>
+</head>
+<body>
+
+  <div class="bg-dots"></div>
+  <div class="orb green"></div>
+  <div class="orb gold"></div>
+  <div class="orb purple"></div>
+  <div class="orb blue"></div>
+
+  <!-- FLOATING COLOR SCHEME SWITCHER -->
+  <button class="floating-theme-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Cambiar Modo Claro/Oscuro">🌓</button>
+
+  <!-- ==================== HEADER SYSTEM ==================== -->
+  <header class="exam-header hidden" id="examHeader">
+    <div class="header-logo">
+      <h1 id="headerCourseTitle">Evaluación Final EHS</h1>
+      <p>VÉRTICE EHS · SISTEMA ADAPTATIVO</p>
+    </div>
+    
+    <div class="header-meta">
+      <!-- Active Question Timer -->
+      <div class="q-timer-wrap" id="qTimerWrap">
+        <span>Tiempo pregunta</span>
+        <div class="q-timer-bar-bg">
+          <div class="q-timer-bar" id="qTimerBar"></div>
+        </div>
+      </div>
+
+      <!-- Difficulty Level Badge -->
+      <div class="engine-status">
+        <span class="engine-label">Nivel:</span>
+        <span class="difficulty-badge diff-medio" id="diffBadge">Medio</span>
+      </div>
+
+      <!-- Global Exam Countdown Timer -->
+      <div class="timer-wrap">
+        <div class="timer-label">Tiempo Restante</div>
+        <div class="timer" id="timer">30:00</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Progress Bar under header -->
+  <div class="progress-bar-wrap hidden" id="progressBarWrap">
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="progress-label" id="progressLabel">Pregunta 0 de 25</div>
+  </div>
+
+  <!-- ==================== MAIN BODY ==================== -->
+  <div class="exam-body">
+
+    <!-- SCREEN 1: START SCREEN -->
+    <div id="screen-start" class="glass-card">
+      <div class="badge-eval">Examen Final Integrado</div>
+      <h2>Evaluación de Competencias</h2>
+      <p class="sub">Prueba adaptativa inmersiva para los cursos de Trabajo en Alturas y Supervisor EHS</p>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="num">20-35</div>
+          <div class="lbl">Preguntas totales (Adaptativo)</div>
+        </div>
+        <div class="info-card ehs">
+          <div class="num">30</div>
+          <div class="lbl">Minutos totales disponibles</div>
+        </div>
+        <div class="info-card">
+          <div class="num">70%</div>
+          <div class="lbl">Calificación aprobatoria</div>
+        </div>
+        <div class="info-card ehs">
+          <div class="num">15%</div>
+          <div class="lbl">Peso en calificación total</div>
+        </div>
+      </div>
+
+      <div class="setup-box">
+        <label for="selectEngineer">Seleccione el Ingeniero a Evaluar</label>
+        <select class="select-engineer" id="selectEngineer" onchange="onEngineerSelectChange()">
+          <option value="" disabled selected>-- Seleccione una opción --</option>
+          <option value="Ing. Carlos Mendoza">Ing. Carlos Mendoza (Participante A)</option>
+          <option value="Ing. Andrea Ruiz">Ing. Andrea Ruiz (Participante B)</option>
+          <option value="custom">Otro (Registrar perfil manualmente)...</option>
+        </select>
+
+        <!-- Manual Profile Container -->
+        <div id="manualProfileBox" class="manual-profile-box hidden">
+          <label for="customNameInput">Nombre Completo del Participante</label>
+          <input type="text" id="customNameInput" class="custom-name-input" placeholder="Ej. Ing. Juan Pérez">
+          
+          <label for="customScoreInput">Puntaje en Simulador Previo (0-100)</label>
+          <input type="number" id="customScoreInput" class="custom-score-input" min="0" max="100" placeholder="Ej. 85">
+        </div>
+      </div>
+
+      <div style="margin-bottom: 24px;">
+        <button class="btn-start" onclick="btnStartExamClick()">🚀 Iniciar Evaluación</button>
+      </div>
+
+      <div>
+        <button class="btn-secondary" onclick="openAdminModal()">⚙️ Acceso Facilitador (Admin)</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 2: ACTIVE QUESTION SCREEN -->
+    <div id="screen-question" class="glass-card hidden">
+      <div class="q-card-header">
+        <div class="q-module-name" id="qModule">Cargando Módulo...</div>
+        <div class="q-meta-info">
+          <span class="q-category-tag cat-alturas" id="qCatTag">Trabajo en Alturas</span>
+          <button class="flag-btn" id="flagBtn" onclick="btnFlagClick()" title="Marcar pregunta para revisión posterior">🚩 Marcar</button>
+        </div>
+      </div>
+
+      <!-- Scenarios panel (for case study simulations) -->
+      <div class="q-scenario hidden" id="qScenarioBox">
+        <div class="sc-title" id="qScenarioTitle">⚠️ ESCENARIO OPERATIVO</div>
+        <div id="qScenarioText">Cargando escenario práctico...</div>
+      </div>
+
+      <!-- Question Text -->
+      <div class="q-text" id="qText">Cargando enunciado...</div>
+
+      <!-- Options container (Multiple choice) -->
+      <div class="options-grid" id="optionsGrid"></div>
+
+      <!-- Ordering container (Drag & drop sequence) -->
+      <div id="orderingArea" class="hidden">
+        <div class="order-list" id="orderList"></div>
+        <div class="order-action-area">
+          <button class="order-check-btn" id="orderCheckBtn" onclick="btnVerifyOrderClick()">✅ Confirmar Secuenciación</button>
+        </div>
+      </div>
+
+      <!-- Pedagogical Feedback panel -->
+      <div class="feedback-panel hidden" id="feedbackPanel">
+        <div class="feedback-title" id="feedbackTitle">✅ Acierto — Momento de Aprendizaje</div>
+        <div class="feedback-text" id="feedbackText">Explicación técnica...</div>
+        <div class="feedback-meta">
+          <span id="fbReference"><strong>Referencia:</strong> NOM-009-STPS-2011</span>
+          <span id="fbCompetencies"><strong>Competencias:</strong> Cumplimiento Normativo</span>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button class="btn-primary" id="btnNext" disabled onclick="btnNextClick()">Siguiente Pregunta →</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 3: RESULTS SCREEN -->
+    <div id="screen-result" class="glass-card hidden">
+      <div class="results-header">
+        <h2 id="resultTitle">Celebración / Resultado</h2>
+        <p style="color:var(--muted); font-size: 15px">Resumen detallado de acreditación adaptativa Vértice EHS</p>
+      </div>
+
+      <div class="score-dashboard">
+        <div class="score-circle-wrap">
+          <div class="score-ring">
+            <svg width="200" height="200" viewBox="0 0 200 200">
+              <circle cx="100" cy="100" r="90" fill="none" stroke="var(--border)" stroke-width="12"/>
+              <circle cx="100" cy="100" r="90" fill="none" stroke="var(--gold)" stroke-width="12" stroke-linecap="round" id="resultScoreArc" stroke-dasharray="565" stroke-dashoffset="565" style="transition: stroke-dashoffset 2s ease-in-out;"/>
+            </svg>
+            <div class="ring-text">
+              <div class="score-num" id="resultScoreNum">92</div>
+              <div class="score-label">pts obtenidos</div>
+            </div>
+          </div>
+        </div>
+        <div class="score-summary-text" id="resultText">
+          Cargando resumen de rendimiento...
+        </div>
+      </div>
+
+      <!-- Basic Statistics grid -->
+      <div class="metrics-grid">
+        <div class="metric-card corrects">
+          <div class="val" id="metCorrects">18 / 25</div>
+          <div class="lbl">Respuestas Correctas</div>
+        </div>
+        <div class="metric-card dificultad">
+          <div class="val" id="metDiff">Experto</div>
+          <div class="lbl">Nivel de Desempeño Final</div>
+        </div>
+        <div class="metric-card aprobado" id="metStatusCard">
+          <div class="val" id="metStatus">Aprobado</div>
+          <div class="lbl">Estado de Certificación</div>
+        </div>
+      </div>
+
+      <!-- Difficulty path SVG Trajectory line-chart -->
+      <div class="chart-section">
+        <h3 class="section-title-alt">Trayectoria Adaptativa de Dificultad</h3>
+        <div class="chart-container">
+          <svg width="760" height="180" viewBox="0 0 760 180" id="trajectorySvg" style="overflow: visible;">
+            <!-- Grid lines -->
+            <line x1="60" y1="20" x2="740" y2="20" stroke="var(--border)" stroke-dasharray="4"/>
+            <text x="50" y="24" class="chart-axis-lbl" text-anchor="end">Experto</text>
+
+            <line x1="60" y1="60" x2="740" y2="60" stroke="var(--border)" stroke-dasharray="4"/>
+            <text x="50" y="64" class="chart-axis-lbl" text-anchor="end">Difícil</text>
+
+            <line x1="60" y1="100" x2="740" y2="100" stroke="var(--border)" stroke-dasharray="4"/>
+            <text x="50" y="104" class="chart-axis-lbl" text-anchor="end">Medio</text>
+
+            <line x1="60" y1="140" x2="740" y2="140" stroke="var(--border)" stroke-dasharray="4"/>
+            <text x="50" y="144" class="chart-axis-lbl" text-anchor="end">Fácil</text>
+
+            <!-- Active path -->
+            <path id="trajectoryPath" fill="none" stroke="var(--gold)" stroke-width="3" style="transition: stroke-dasharray 2s ease;"/>
+            <g id="trajectoryPoints"></g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Competency Radars grid -->
+      <div class="radars-grid">
+        <div class="radar-box alturas">
+          <h3>Competencias: Alturas</h3>
+          <div class="radar-canvas-wrap">
+            <canvas id="radarAlturasCanvas" width="280" height="280"></canvas>
+          </div>
+        </div>
+        <div class="radar-box supervisor">
+          <h3>Competencias: Supervisor EHS</h3>
+          <div class="radar-canvas-wrap">
+            <canvas id="radarSupervisorCanvas" width="280" height="280"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10 Modules Mastery progressbars -->
+      <div class="mastery-section">
+        <h3 class="section-title-alt">Rendimiento Consolidado por Módulo</h3>
+        <div class="mastery-grid">
+          <div class="mastery-category-box alturas">
+            <h3>Trabajo en Alturas</h3>
+            <div id="masteryAlturasList"></div>
+          </div>
+          <div class="mastery-category-box supervisor">
+            <h3>Supervisor EHS</h3>
+            <div id="masterySupervisorList"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Digital Gold Certificate card -->
+      <div class="cert-section" id="certSection">
+        <h3 class="section-title-alt">Acreditación Académica</h3>
+        <div class="cert-box" id="certCard">
+          <div class="cert-border-corner cbc-tl"></div>
+          <div class="cert-border-corner cbc-tr"></div>
+          <div class="cert-border-corner cbc-bl"></div>
+          <div class="cert-border-corner cbc-br"></div>
+          
+          <div class="cert-header">Vértice EHS Acreditación</div>
+          <div class="cert-title">Certificado de Aprobación</div>
+          <div class="cert-subtitle">Programa de Formación Técnica y Liderazgo de Seguridad Integrada</div>
+          
+          <div class="cert-to">Se otorga a:</div>
+          <div class="cert-name" id="certName">ING. CIMSSOS MENDOZA</div>
+          
+          <div class="cert-text">
+            Por haber completado satisfactoriamente los módulos de formación y acreditado la evaluación final adaptativa de 9 horas acumuladas de instrucción en <strong>Trabajo en Alturas (NOM-009-STPS-2011)</strong> y <strong>Supervisor de EHS</strong>.
+          </div>
+          
+          <div class="cert-meta-row">
+            <div class="cert-meta-col">
+              Fecha de Emisión
+              <strong id="certDate">03 de junio, 2026</strong>
+            </div>
+            <div class="cert-meta-col">
+              Ponderación Obtenida
+              <strong id="certWeight">14.2% / 15.0%</strong>
+            </div>
+            <div class="cert-meta-col">
+              Calificación Examen
+              <strong id="certScore">95 / 100</strong>
+            </div>
+          </div>
+          
+          <div class="cert-badge">✅ VÉRTICE EHS · COMPETENTE</div>
+        </div>
+      </div>
+
+      <!-- Learning mode for failed questions -->
+      <div class="failed-review-section hidden" id="failedReviewSection">
+        <h3>💡 Zona de Aprendizaje de Errores</h3>
+        <p>Has respondido de forma desvaída en algunos conceptos críticos. ¿Deseas realizar una sesión práctica interactiva para repasar y resolver de forma correcta las preguntas que fallaste en la evaluación?</p>
+        <button class="btn-review-failed" onclick="btnStartReviewClick()">🔄 Repasar Preguntas Fallidas</button>
+      </div>
+
+      <!-- Results screen footer buttons -->
+      <div class="results-actions">
+        <button class="btn-primary" onclick="EHSReportGenerator.downloadRecordPDF('current_exam_download')">📥 Guardar PDF Completo</button>
+        <button class="btn-secondary" onclick="shareOnLinkedInClick()">🔗 Compartir Badge en LinkedIn</button>
+        <button class="btn-secondary" onclick="btnResetExamClick()">🔄 Nueva Evaluación</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 4: FACILITATOR ADMIN PANEL -->
+    <div id="adminPanel" class="glass-card hidden">
+      <div class="admin-title-row">
+        <h2>Panel del Facilitador EHS</h2>
+        <button class="btn-secondary" onclick="closeAdminPanel()">← Volver al Inicio</button>
+      </div>
+
+      <div class="admin-actions-row">
+        <button class="admin-btn-action" onclick="EHSReportGenerator.loadDemoAdminData()">Cargar Datos Demo (Carlos / Andrea)</button>
+        <button class="admin-btn-delete-all" onclick="EHSReportGenerator.clearAllRecords()">Limpiar Todos los Registros</button>
+      </div>
+
+      <h3 class="section-title-alt" style="margin-bottom: 14px;">Historial de Evaluaciones de Participantes</h3>
+      <div class="admin-table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Ingeniero</th>
+              <th>Fecha de Examen</th>
+              <th>Nota</th>
+              <th>Estado</th>
+              <th>Tiempo Usado</th>
+              <th>Seguridad</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="adminRecordsTableBody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="section-title-alt" style="margin-bottom: 14px;">Análisis Consolidado de Brechas Preventivas</h3>
+      <div id="adminGapsAnalysis" style="margin-bottom: 20px;">
+        <!-- Dynamically calculated comparative analysis -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ==================== DIALOG MODALS & OVERLAYS ==================== -->
+  
+  <!-- Facilitador Auth Passcode Modal -->
+  <div class="modal-overlay hidden" id="adminAuthModal">
+    <div class="modal-box">
+      <h3>Acceso Restringido</h3>
+      <p>Ingrese el código de acceso del facilitador para ingresar al panel administrativo de análisis de brechas grupales.</p>
+      <input type="password" id="adminPassInput" class="modal-input" placeholder="Código de facilitador...">
+      <div class="modal-actions">
+        <button class="btn-primary" onclick="btnConfirmAdminLogin()">Entrar</button>
+        <button class="btn-secondary" onclick="closeAdminAuthModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Re-run Resume state Modal -->
+  <div class="modal-overlay hidden" id="resumeModal">
+    <div class="modal-box">
+      <h3>Examen Suspendido Detectado</h3>
+      <p>Hemos detectado un intento anterior inconcluso del participante <strong id="resumeName">Carlos</strong>. ¿Desea reanudar la prueba en el punto exacto donde se interrumpió?</p>
+      <div class="modal-actions">
+        <button class="btn-primary" onclick="btnConfirmResumeClick()">Reanudar Examen</button>
+        <button class="btn-secondary" onclick="btnCancelResumeClick()">Iniciar Nuevo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Security warnings floating overlay notification -->
+  <div class="sec-warning-banner hidden" id="secWarningBanner">
+    <span>⚠️</span>
+    <span id="secWarningText">Has cambiado de pantalla. Esta acción queda registrada para el facilitador. (Aviso: 1/3)</span>
+  </div>
+
+  <!-- ==================== INTERACTION LOGIC CONTROL ==================== -->
+  <script src="questions.js"></script>
+  <script src="engine.js"></script>
+  <script src="report-generator.js"></script>
+  <script>
+    // Global references for scripts compatibility under local file protocol
+    let currentSelectedOption = null;
+
+    // Trigger theme switcher
+    function toggleTheme() {
+      document.body.classList.toggle("light-mode");
+      const isLight = document.body.classList.contains("light-mode");
+      document.getElementById("themeToggleBtn").textContent = isLight ? "🌙" : "☀️";
+    }
+
+    // Populate dropdown from local storage
+    function populateEngineersDropdown() {
+      const select = document.getElementById("selectEngineer");
+      if (!select) return;
+      
+      const defaultOption = select.options[0];
+      select.innerHTML = "";
+      select.appendChild(defaultOption);
+      
+      try {
+        const raw = localStorage.getItem('ehs_training_state');
+        if (raw) {
+          const state = JSON.parse(raw);
+          if (state && state.participants) {
+            state.participants.forEach((p, index) => {
+              const option = document.createElement("option");
+              option.value = p.nombre;
+              option.textContent = `${p.nombre} (Participante ${index === 0 ? 'A' : index === 1 ? 'B' : index + 1})`;
+              
+              // Calculate average of active simulator scores
+              let totalScore = 0;
+              let count = 0;
+              const scores = [
+                p.simulador_riesgos_score, p.dinamica_epp_score, p.simulador_arnes_score,
+                p.dinamica_investigacion_score, p.dinamica_liderazgo_score, p.rol_play_supervisor_score
+              ];
+              scores.forEach(s => {
+                if (s > 0) {
+                  totalScore += s;
+                  count++;
+                }
+              });
+              const avgScore = count > 0 ? Math.round(totalScore / count) : 75;
+              option.dataset.score = avgScore;
+              select.appendChild(option);
+            });
+          }
+        }
+      } catch (e) {
+        console.error("Error populating engineers dropdown:", e);
+      }
+      
+      // Add custom option
+      const customOption = document.createElement("option");
+      customOption.value = "custom";
+      customOption.textContent = "Otro (Registrar perfil manualmente)...";
+      select.appendChild(customOption);
+    }
+
+    // Toggle Manual Onboarding profile inputs
+    function onEngineerSelectChange() {
+      const select = document.getElementById("selectEngineer");
+      const manualBox = document.getElementById("manualProfileBox");
+      if (select.value === "custom") {
+        manualBox.classList.remove("hidden");
+        document.getElementById("customNameInput").focus();
+      } else {
+        manualBox.classList.add("hidden");
+      }
+    }
+
+    // Start Exam button trigger
+    function btnStartExamClick() {
+      const select = document.getElementById("selectEngineer");
+      const manualBox = document.getElementById("manualProfileBox");
+      let name = "";
+      let score = 70; // score predeterminado para medio
+
+      if (select.value === "") {
+        alert("Seleccione un ingeniero de la lista o registre uno nuevo.");
+        return;
+      }
+
+      if (select.value === "custom") {
+        const customName = document.getElementById("customNameInput").value.trim();
+        const customScore = document.getElementById("customScoreInput").value.trim();
+        
+        if (customName === "") {
+          alert("Por favor ingrese el nombre del ingeniero.");
+          return;
+        }
+        name = customName;
+        score = parseInt(customScore) || 70;
+      } else {
+        name = select.value;
+        const selectedOption = select.options[select.selectedIndex];
+        if (selectedOption && selectedOption.dataset.score) {
+          score = parseInt(selectedOption.dataset.score) || 75;
+        } else {
+          // Fallback profiles
+          if (name === "Ing. Carlos Mendoza" || name === "Carlos Mendoza") {
+            score = 92;
+          } else if (name === "Ing. Andrea Ruiz" || name === "Andrea Ruiz") {
+            score = 78;
+          } else {
+            score = 75;
+          }
+        }
+      }
+
+      examEngine.startNewExam(name, score);
+    }
+
+    // Modal Admin Login togglers
+    function openAdminModal() {
+      document.getElementById("adminAuthModal").classList.remove("hidden");
+      document.getElementById("adminPassInput").value = "";
+      document.getElementById("adminPassInput").focus();
+    }
+    
+    function closeAdminAuthModal() {
+      document.getElementById("adminAuthModal").classList.add("hidden");
+    }
+
+    function btnConfirmAdminLogin() {
+      const pass = document.getElementById("adminPassInput").value;
+      if (EHSReportGenerator.loginAdmin(pass)) {
+        document.getElementById("screen-start").classList.add("hidden");
+      }
+    }
+
+    function closeAdminPanel() {
+      document.getElementById("adminPanel").classList.add("hidden");
+      document.getElementById("screen-start").classList.remove("hidden");
+    }
+
+    // ==================== RENDERING COMPONENT CONTROL ====================
+    
+    function updateHeaderMonitorUI() {
+      const badge = document.getElementById("diffBadge");
+      const diff = examEngine.state.nivelActual;
+      badge.textContent = diff.charAt(0).toUpperCase() + diff.slice(1);
+      badge.className = `difficulty-badge diff-${diff}`;
+    }
+
+    /**
+     * Renderiza dinámicamente la pregunta actual en la interfaz
+     */
+    function renderQuestionUI(q, index, total, isReview = false) {
+      // Mostrar pantallas correspondientes
+      document.getElementById("screen-start").classList.add("hidden");
+      document.getElementById("screen-result").classList.add("hidden");
+      document.getElementById("adminPanel").classList.add("hidden");
+      document.getElementById("examHeader").classList.remove("hidden");
+      document.getElementById("progressBarWrap").classList.remove("hidden");
+      document.getElementById("screen-question").classList.remove("hidden");
+
+      // Set titles y tags
+      document.getElementById("headerCourseTitle").textContent = q.cat === "trabajoAlturas" ? "Curso A: Trabajo en Alturas" : "Curso B: Supervisor EHS";
+      document.getElementById("qCatTag").textContent = q.cat === "trabajoAlturas" ? "Trabajo en Alturas" : "Supervisor EHS";
+      document.getElementById("qCatTag").className = `q-category-tag ${q.cat === "trabajoAlturas" ? 'cat-alturas' : 'cat-supervisor'}`;
+      
+      const cleanMod = q.moduleName.replace("modulo", "Módulo ").replace("_", ": ");
+      document.getElementById("qModule").textContent = cleanMod;
+
+      // Flag button state
+      const flagBtn = document.getElementById("flagBtn");
+      if (isReview) {
+        flagBtn.classList.add("hidden");
+      } else {
+        flagBtn.classList.remove("hidden");
+        const isFlagged = examEngine.state.flaggedForReview.includes(q.id);
+        flagBtn.textContent = isFlagged ? "⭐ Marcada" : "🚩 Marcar";
+        flagBtn.className = `flag-btn ${isFlagged ? 'flagged' : ''}`;
+      }
+
+      // Reset feedback y botones de acción
+      document.getElementById("feedbackPanel").classList.add("hidden");
+      document.getElementById("btnNext").disabled = true;
+      currentSelectedOption = null;
+
+      // Actualizar progressbar
+      const pct = (index / total) * 100;
+      document.getElementById("progressBar").style.width = `${pct}%`;
+      document.getElementById("progressLabel").textContent = isReview 
+        ? `Repaso: Pregunta ${index + 1} de ${total}` 
+        : `Pregunta ${index + 1} de ${total}`;
+
+      // Configurar escenarios prácticos
+      const scenarioBox = document.getElementById("qScenarioBox");
+      if (q.scenario) {
+        scenarioBox.classList.remove("hidden");
+        document.getElementById("qScenarioText").textContent = q.scenario;
+        if (q.difficulty === "experto" || q.difficulty === "dificil") {
+          scenarioBox.className = "q-scenario critico";
+          document.getElementById("qScenarioTitle").textContent = "🚨 SITUACIÓN CRÍTICA EVALUATIVA";
+        } else {
+          scenarioBox.className = "q-scenario";
+          document.getElementById("qScenarioTitle").textContent = "⚠️ ESCENARIO OPERATIVO";
+        }
+      } else {
+        scenarioBox.classList.add("hidden");
+      }
+
+      // Enunciado
+      document.getElementById("qText").textContent = q.text;
+
+      // Renderizar interfaces de interacción según formato
+      const optionsGrid = document.getElementById("optionsGrid");
+      const orderingArea = document.getElementById("orderingArea");
+
+      optionsGrid.innerHTML = "";
+      orderingArea.classList.add("hidden");
+      optionsGrid.classList.remove("hidden");
+
+      if (q.type === "orden") {
+        optionsGrid.classList.add("hidden");
+        orderingArea.classList.remove("hidden");
+        renderOrderingInterface(q);
+      } else {
+        renderMultipleChoiceInterface(q);
+      }
+      
+      updateHeaderMonitorUI();
+    }
+
+    function renderMultipleChoiceInterface(q) {
+      const grid = document.getElementById("optionsGrid");
+      const letters = ["A", "B", "C", "D"];
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn";
+        btn.id = `opt-${idx}`;
+        btn.onclick = () => selectMultipleChoiceAnswer(idx);
+
+        btn.innerHTML = `
+          <div class="option-letter">${letters[idx]}</div>
+          <div class="option-text">${opt}</div>
+        `;
+        grid.appendChild(btn);
+      });
+    }
+
+    function selectMultipleChoiceAnswer(selectedIdx) {
+      if (currentSelectedOption !== null) return; // Bloquear doble respuesta
+      currentSelectedOption = selectedIdx;
+
+      // Aplicar estilos seleccionados
+      const btn = document.getElementById(`opt-${selectedIdx}`);
+      if (btn) btn.classList.add("selected");
+
+      // Confirmación de respuesta y render de feedback
+      confirmActiveAnswer();
+    }
+
+    function renderOrderingInterface(q) {
+      const list = document.getElementById("orderList");
+      list.innerHTML = "";
+      document.getElementById("orderCheckBtn").style.display = "block";
+
+      // Barajar de forma aleatoria los pasos
+      const shuffledItems = q.items.map((item, idx) => ({ text: item, originalIndex: idx }));
+      shuffledItems.sort(() => Math.random() - 0.5);
+
+      shuffledItems.forEach((item, userIdx) => {
+        const row = document.createElement("div");
+        row.className = "order-item";
+        row.draggable = true;
+        row.dataset.originalIdx = item.originalIndex;
+        row.dataset.userPosition = userIdx;
+
+        row.innerHTML = `
+          <span class="handle">⠿</span>
+          <span class="step-num">${userIdx + 1}</span>
+          <span class="order-item-text">${item.text}</span>
+          <div class="order-controls">
+            <button class="order-btn-move" onclick="moveOrderItem(this, -1, event)">▲</button>
+            <button class="order-btn-move" onclick="moveOrderItem(this, 1, event)">▼</button>
+          </div>
+        `;
+
+        // Eventos de Drag & Drop para mouse
+        row.ondragstart = (e) => {
+          window.draggedItem = row;
+          row.classList.add("dragging");
+          e.dataTransfer.effectAllowed = "move";
+        };
+        row.ondragover = (e) => e.preventDefault();
+        row.ondrop = (e) => {
+          e.preventDefault();
+          if (window.draggedItem && window.draggedItem !== row) {
+            const listRef = document.getElementById("orderList");
+            const itemsArr = Array.from(listRef.children);
+            const draggedIdx = itemsArr.indexOf(window.draggedItem);
+            const targetIdx = itemsArr.indexOf(row);
+            
+            if (draggedIdx < targetIdx) {
+              listRef.insertBefore(window.draggedItem, row.nextSibling);
+            } else {
+              listRef.insertBefore(window.draggedItem, row);
+            }
+            rebuildOrderIndexes();
+          }
+        };
+        row.ondragend = () => row.classList.remove("dragging");
+
+        list.appendChild(row);
+      });
+    }
+
+    // Funciones auxiliares para mover elementos del ordenamiento
+    function moveOrderItem(button, direction, event) {
+      event.stopPropagation();
+      const item = button.closest('.order-item');
+      const list = document.getElementById("orderList");
+      const items = Array.from(list.children);
+      const idx = items.indexOf(item);
+      const targetIdx = idx + direction;
+
+      if (targetIdx >= 0 && targetIdx < items.length) {
+        if (direction === -1) {
+          list.insertBefore(item, items[targetIdx]);
+        } else {
+          list.insertBefore(item, items[targetIdx].nextSibling);
+        }
+        rebuildOrderIndexes();
+      }
+    }
+
+    function rebuildOrderIndexes() {
+      const list = document.getElementById("orderList");
+      const items = Array.from(list.children);
+      items.forEach((item, userIdx) => {
+        item.dataset.userPosition = userIdx;
+        item.querySelector(".step-num").textContent = userIdx + 1;
+      });
+    }
+
+    function btnVerifyOrderClick() {
+      const list = document.getElementById("orderList");
+      const items = Array.from(list.children);
+      const userSequence = items.map(item => parseInt(item.dataset.originalIdx));
+      
+      // Enviar respuesta al validador del motor
+      confirmActiveAnswer(userSequence);
+    }
+
+    /**
+     * Confirma la respuesta activa y gatilla la validación
+     */
+    function confirmActiveAnswer(userOrderAns = null) {
+      let result;
+      
+      if (examEngine.state.reviewModeActive) {
+        result = examEngine.submitReviewAnswer(userOrderAns !== null ? userOrderAns : currentSelectedOption);
+      } else {
+        result = examEngine.submitAnswer(userOrderAns !== null ? userOrderAns : currentSelectedOption);
+      }
+
+      if (!result) return;
+
+      // Dibujar feedback de las opciones visualmente
+      const q = examEngine.state.reviewModeActive 
+        ? examEngine.state.reviewQuestions[examEngine.state.reviewCurrentIndex]
+        : examEngine.state.currentQuestion;
+
+      if (q.type === "orden") {
+        document.getElementById("orderCheckBtn").style.display = "none";
+        
+        // Bloquear y colorear items del orden
+        const items = Array.from(document.getElementById("orderList").children);
+        items.forEach(item => {
+          item.draggable = false;
+          item.querySelector(".handle").style.opacity = "0.2";
+          item.querySelectorAll(".order-btn-move").forEach(b => b.disabled = true);
+          
+          const orig = parseInt(item.dataset.originalIdx);
+          const correctPos = q.correctOrder.indexOf(orig);
+          const userPos = parseInt(item.dataset.userPosition);
+          
+          if (correctPos === userPos) {
+            item.classList.add("order-correct");
+          } else {
+            item.classList.add("order-wrong");
+          }
+        });
+
+        // Si falló, inyectar el bloque explicativo con la secuencia correcta
+        if (!result.isCorrect) {
+          const correctBlock = document.createElement("div");
+          correctBlock.style.cssText = "margin-top:16px; padding:16px; background:rgba(46,139,87,.08); border:1px solid rgba(46,139,87,.25); border-radius:8px; font-size:14px; color:var(--green-light);";
+          correctBlock.id = "correctSequenceBlock";
+          correctBlock.innerHTML = `<strong>Secuencia Correcta:</strong><br>${q.correctOrder.map((idx, step) => `${step+1}. ${q.items[idx]}`).join('<br>')}`;
+          document.getElementById("orderList").parentNode.insertBefore(correctBlock, document.getElementById("orderList").nextSibling);
+        }
+      } else {
+        // Colorear opciones del Choice
+        const btns = document.querySelectorAll(".option-btn");
+        btns.forEach((btn, idx) => {
+          btn.onclick = null; // Quitar click listeners
+          if (idx === q.answer) {
+            btn.classList.add("correct");
+          } else if (idx === currentSelectedOption && currentSelectedOption !== q.answer) {
+            btn.classList.add("wrong");
+          } else {
+            btn.classList.add("neutral");
+          }
+        });
+      }
+
+      // Renderizar feedback panel
+      const fbPanel = document.getElementById("feedbackPanel");
+      fbPanel.classList.remove("hidden");
+      fbPanel.className = `feedback-panel show ${result.isCorrect ? 'correct-box' : 'wrong-box'}`;
+      
+      document.getElementById("feedbackTitle").innerHTML = result.isCorrect 
+        ? "<span>✅</span> Acierto — Momento de Aprendizaje" 
+        : "<span>❌</span> Desvío — Momento de Aprendizaje";
+      document.getElementById("feedbackText").textContent = result.feedbackText;
+
+      // Inyectar referencias y competencias
+      document.getElementById("fbReference").innerHTML = `<strong>Referencia legal:</strong> ${q.reference || "Procedimientos Vértice EHS"}`;
+      document.getElementById("fbCompetencies").innerHTML = `<strong>Competencias:</strong> ${(q.competencies || []).join(", ")}`;
+
+      // Activar botón de siguiente pregunta
+      document.getElementById("btnNext").disabled = false;
+      document.getElementById("btnNext").focus();
+    }
+
+    function btnNextClick() {
+      // Eliminar el bloque de secuencia de orden si existe
+      const block = document.getElementById("correctSequenceBlock");
+      if (block) block.remove();
+
+      if (examEngine.state.reviewModeActive) {
+        examEngine.nextReviewStep();
+      } else {
+        examEngine.nextStep();
+      }
+    }
+
+    function btnFlagClick() {
+      const flagged = examEngine.toggleFlagCurrentQuestion();
+      const flagBtn = document.getElementById("flagBtn");
+      flagBtn.textContent = flagged ? "⭐ Marcada" : "🚩 Marcar";
+      flagBtn.className = `flag-btn ${flagged ? 'flagged' : ''}`;
+    }
+
+    // ==================== RENDERING RESULT DASHBOARD ====================
+    
+    function showResultsUI(score, aprobado, puntos, maxPuntos) {
+      // Transición de pantallas
+      document.getElementById("screen-question").classList.add("hidden");
+      document.getElementById("examHeader").classList.add("hidden");
+      document.getElementById("progressBarWrap").classList.add("hidden");
+      document.getElementById("screen-result").classList.remove("hidden");
+
+      // Configurar textos informativos del ring
+      document.getElementById("resultScoreNum").textContent = score;
+      
+      const arc = document.getElementById("resultScoreArc");
+      const circumference = 565; // 2 * pi * r (r=90)
+      const offset = circumference - (score / 100) * circumference;
+      
+      // Retrasar animación del círculo de puntaje para suavidad
+      setTimeout(() => {
+        arc.style.strokeDashoffset = offset;
+      }, 300);
+
+      // Métricas breves del dashboard
+      document.getElementById("metCorrects").textContent = `${examEngine.state.historialRespuestas.filter(r=>r.correct).length} de ${examEngine.state.historialRespuestas.length}`;
+      
+      const diffLabel = examEngine.state.nivelActual.charAt(0).toUpperCase() + examEngine.state.nivelActual.slice(1);
+      document.getElementById("metDiff").textContent = diffLabel;
+      
+      const statusLabel = document.getElementById("metStatus");
+      const statusCard = document.getElementById("metStatusCard");
+      
+      statusLabel.textContent = aprobado ? "APROBADO" : "REFORZAR";
+      if (aprobado) {
+        statusCard.className = "metric-card aprobado";
+      } else {
+        statusCard.className = "metric-card aprobado repro";
+      }
+
+      // Mensaje de diagnóstico descriptivo
+      const summaryText = document.getElementById("resultText");
+      const resultTitle = document.getElementById("resultTitle");
+
+      if (aprobado) {
+        resultTitle.textContent = "🏆 ¡Certificación Aprobada!";
+        resultTitle.style.color = "var(--gold-light)";
+        
+        // Ponderación de nota
+        const finalWeight = ((score / 100) * 15).toFixed(1);
+        
+        summaryText.innerHTML = `El participante <strong>${examEngine.state.activeEngineer}</strong> ha completado la evaluación inmersiva con éxito, obteniendo una calificación final del <strong>${score}%</strong> (equivalente a <strong>${finalWeight}%</strong> de la ponderación total del 15% del programa). Demostró un nivel continuo calificado como <strong>${diffLabel}</strong>.`;
+      } else {
+        resultTitle.textContent = "📚 Plan de Reforzamiento";
+        resultTitle.style.color = "var(--red)";
+        
+        summaryText.innerHTML = `El participante <strong>${examEngine.state.activeEngineer}</strong> obtuvo un desempeño consolidado del <strong>${score}%</strong>, lo cual no alcanza el estándar del 70% requerido para certificar competencias en campo de forma autónoma. Deberá realizar el plan de estudio personalizado.`;
+      }
+
+      // Dibujar trayectoria adaptativa
+      drawTrajectoryChartSVG();
+
+      // Dibujar desglose de barras de módulos
+      drawMasteryBarsUI();
+
+      // Dibujar radares de competencia
+      EHSReportGenerator.compileRadarCharts(examEngine.state.aciertosPorModulo);
+
+      // Mostrar Certificado si aplica
+      const certSection = document.getElementById("certSection");
+      if (aprobado) {
+        certSection.classList.remove("hidden");
+        document.getElementById("certName").textContent = examEngine.state.activeEngineer.toUpperCase();
+        document.getElementById("certScore").textContent = `${score} / 100`;
+        document.getElementById("certWeight").textContent = `${((score / 100) * 15).toFixed(1)}% / 15.0%`;
+        
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById("certDate").textContent = new Date().toLocaleDateString('es-ES', options);
+      } else {
+        certSection.classList.add("hidden");
+      }
+
+      // Mostrar módulo de repaso de errores si hay fallas
+      const falladasCount = examEngine.state.historialRespuestas.filter(r => !r.correct).length;
+      const reviewSection = document.getElementById("failedReviewSection");
+      if (falladasCount > 0) {
+        reviewSection.classList.remove("hidden");
+      } else {
+        reviewSection.classList.add("hidden");
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /**
+     * Dibuja una línea de trayectoria sobre el gráfico SVG de dificultad
+     */
+    function drawTrajectoryChartSVG() {
+      const history = examEngine.state.dificultadHistorial;
+      const path = document.getElementById("trajectoryPath");
+      const pointsContainer = document.getElementById("trajectoryPoints");
+      
+      pointsContainer.innerHTML = "";
+
+      const yMap = {
+        experto: 20,
+        dificil: 60,
+        medio: 100,
+        facil: 140
+      };
+
+      const steps = history.length;
+      const chartWidth = 680; // 740 - 60
+      const startX = 60;
+      const xIncrement = steps > 1 ? chartWidth / (steps - 1) : chartWidth;
+
+      let pathData = "";
+
+      history.forEach((diff, idx) => {
+        const x = startX + idx * xIncrement;
+        const y = yMap[diff];
+
+        if (idx === 0) {
+          pathData = `M ${x} ${y}`;
+        } else {
+          pathData += ` L ${x} ${y}`;
+        }
+
+        // Crear elemento de nodo (círculo) en SVG
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute("cx", x);
+        circle.setAttribute("cy", y);
+        circle.setAttribute("r", "5");
+        
+        let color = "var(--blue)";
+        if (diff === "facil") color = "var(--green-light)";
+        if (diff === "dificil") color = "var(--amber)";
+        if (diff === "experto") color = "var(--purple-light)";
+        
+        circle.setAttribute("fill", color);
+        circle.setAttribute("stroke", "rgba(0,0,0,0.5)");
+        circle.setAttribute("stroke-width", "1.5");
+
+        const tooltip = document.createElementNS("http://www.w3.org/2000/svg", "title");
+        tooltip.textContent = `Pregunta ${idx + 1}: ${diff.toUpperCase()}`;
+        circle.appendChild(tooltip);
+
+        pointsContainer.appendChild(circle);
+      });
+
+      path.setAttribute("d", pathData);
+      
+      // Efecto animado dibujando el trazo
+      const length = path.getTotalLength();
+      path.style.strokeDasharray = length;
+      path.style.strokeDashoffset = length;
+      
+      setTimeout(() => {
+        path.style.transition = "stroke-dashoffset 2.5s ease-in-out";
+        path.style.strokeDashoffset = "0";
+      }, 200);
+    }
+
+    function drawMasteryBarsUI() {
+      const listAlturas = document.getElementById("masteryAlturasList");
+      const listSupervisor = document.getElementById("masterySupervisorList");
+
+      listAlturas.innerHTML = "";
+      listSupervisor.innerHTML = "";
+
+      const stats = examEngine.state.aciertosPorModulo;
+
+      const alturasModules = ["modulo1_normativa", "modulo2_riesgos", "modulo3_epp", "modulo4_procedimientos", "modulo5_rescate"];
+      const supervisorModules = ["modulo1_roles", "modulo2_gestionRiesgos", "modulo3_investigacion", "modulo4_auditorias", "modulo5_liderazgo"];
+
+      const buildBarHTML = (modKey) => {
+        const label = modKey.replace("modulo", "Módulo ").replace("gestion", "gestión").replace("investigacion", "investigación").replace("auditorias", "auditorías").replace("_", ": ");
+        const mStats = stats[modKey] || { total: 0, correct: 0 };
+        
+        let pct = 0;
+        let infoText = "Sin Evaluar";
+        if (mStats.total > 0) {
+          pct = Math.round((mStats.correct / mStats.total) * 100);
+          infoText = `${mStats.correct} / ${mStats.total} (${pct}%)`;
+        }
+
+        return `
+          <div class="mastery-item">
+            <div class="mastery-info">
+              <span class="mastery-name">${label}</span>
+              <span class="mastery-pct">${infoText}</span>
+            </div>
+            <div class="mastery-track">
+              <div class="mastery-fill" style="width: ${mStats.total > 0 ? pct : 0}%"></div>
+            </div>
+          </div>
+        `;
+      };
+
+      alturasModules.forEach(mod => {
+        listAlturas.innerHTML += buildBarHTML(mod);
+      });
+
+      supervisorModules.forEach(mod => {
+        listSupervisor.innerHTML += buildBarHTML(mod);
+      });
+    }
+
+    // Start Review failed questions click
+    function btnStartReviewClick() {
+      document.getElementById("failedReviewSection").classList.add("hidden");
+      examEngine.startReviewMode();
+    }
+
+    // ==================== APP SYSTEM ACTIONS & TRIGGERS ====================
+
+    function btnResetExamClick() {
+      document.getElementById("screen-result").classList.add("hidden");
+      document.getElementById("screen-start").classList.remove("hidden");
+      document.getElementById("selectEngineer").value = "";
+      document.getElementById("manualProfileBox").classList.add("hidden");
+    }
+
+    // Share Badge on LinkedIn Simulation
+    function shareOnLinkedInClick() {
+      const url = "https://www.linkedin.com/sharing/share-offsite/?url=" + encodeURIComponent("https://www.verticeehs.com/badges/ehs-expert");
+      window.open(url, '_blank', 'width=600,height=500');
+    }
+
+    // Timer UIs bindings
+    function updateTimersUI(timeLeft, questionTimeLeft, questionTimeMax) {
+      // Reloj General
+      const m = Math.floor(timeLeft / 60);
+      const s = timeLeft % 60;
+      const el = document.getElementById("timer");
+      el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+      
+      if (timeLeft <= 300 && timeLeft > 60) el.className = "timer warning";
+      else if (timeLeft <= 60) el.className = "timer critical";
+      else el.className = "timer";
+
+      // Barra de tiempo por pregunta
+      const pct = (questionTimeLeft / questionTimeMax) * 100;
+      const bar = document.getElementById("qTimerBar");
+      bar.style.width = `${pct}%`;
+      
+      if (questionTimeLeft <= 10) {
+        bar.className = "q-timer-bar crit";
+      } else if (questionTimeLeft <= (questionTimeMax * 0.3)) {
+        bar.className = "q-timer-bar warn";
+      } else {
+        bar.className = "q-timer-bar";
+      }
+    }
+
+    // Timer question expired trigger from engine
+    function onQuestionTimeOut() {
+      if (currentSelectedOption === null) {
+        // Registrar respuesta incorrecta (index -1)
+        confirmActiveAnswer(-1);
+      }
+    }
+
+    // Security warning notifier from engine
+    let warningTimeout = null;
+    function onSecurityWarning(count) {
+      const banner = document.getElementById("secWarningBanner");
+      const text = document.getElementById("secWarningText");
+      
+      text.textContent = `Has salido del área del examen. Registro de seguridad activado. (Desvíos: ${count} de 3)`;
+      banner.classList.remove("hidden");
+
+      if (warningTimeout) clearTimeout(warningTimeout);
+      warningTimeout = setTimeout(() => {
+        banner.classList.add("hidden");
+      }, 4000);
+    }
+
+    // Level-up / Level-down dynamic effects from engine
+    window.onLevelChange = function(newLevel, direction) {
+      // Cambiar clase de indicador de badge con una animación rápida
+      const badge = document.getElementById("diffBadge");
+      
+      // Forzar reflow para animación
+      badge.style.animation = "none";
+      badge.offsetHeight; 
+      
+      if (direction === "up") {
+        badge.style.animation = "pulseGreen 1s 2 alternate";
+        // Añadir una mini notificación sonora si estuviera disponible
+      } else {
+        badge.style.animation = "pulseRed 1s 2 alternate";
+      }
+      
+      updateHeaderMonitorUI();
+    };
+
+    // Estilos dinámicos inyectados de cambio de nivel
+    const styleSheet = document.createElement("style");
+    styleSheet.innerHTML = `
+      @keyframes pulseGreen {
+        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,139,87,0.7); }
+        100% { transform: scale(1.15); box-shadow: 0 0 15px rgba(46,139,87,0.9); }
+      }
+      @keyframes pulseRed {
+        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(224,82,82,0.7); }
+        100% { transform: scale(1.15); box-shadow: 0 0 15px rgba(224,82,82,0.9); }
+      }
+    `;
+    document.head.appendChild(styleSheet);
+
+    // ==================== AUTO-SAVE RESUME SYSTEM INTERACTION ====================
+    let pendingSavedState = null;
+
+    function checkResumeExamOnLoad() {
+      const saved = examEngine.checkResumeState();
+      if (saved) {
+        pendingSavedState = saved;
+        document.getElementById("resumeName").textContent = saved.activeEngineer;
+        document.getElementById("resumeModal").classList.remove("hidden");
+      }
+    }
+
+    function btnConfirmResumeClick() {
+      document.getElementById("resumeModal").classList.add("hidden");
+      if (pendingSavedState) {
+        examEngine.resumeExam(pendingSavedState);
+      }
+    }
+
+    function btnCancelResumeClick() {
+      document.getElementById("resumeModal").classList.add("hidden");
+      localStorage.removeItem("ehs_exam_state");
+      pendingSavedState = null;
+    }
+
+    // Iniciar auto-save checker al arrancar
+    window.addEventListener("load", () => {
+      populateEngineersDropdown();
+      checkResumeExamOnLoad();
+    });
+  </script>
+</body>
+</html>

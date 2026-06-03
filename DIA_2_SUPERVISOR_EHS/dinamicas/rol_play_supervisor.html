@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dinámica 6: Role-play de Supervisión EHS | Vértice EHS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1B365D;
+      --primary-light: #2c4a75;
+      --accent: #ff6b35;
+      --accent-glow: rgba(255, 107, 53, 0.4);
+      --bg-dark: #091322;
+      --bg-card: rgba(18, 37, 67, 0.55);
+      --white: #ffffff;
+      --success: #3aaf6d;
+      --warning: #ed8936;
+      --error: #f56565;
+      --border: rgba(255, 255, 255, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 750px;
+      width: 100%;
+      background: var(--bg-card);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      height: 90vh;
+      max-height: 650px;
+    }
+
+    header {
+      text-align: center;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.8rem;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .instructions {
+      font-size: 0.9rem;
+      color: #cbd5e0;
+      margin-top: 4px;
+    }
+
+    /* Chat Area */
+    .chat-history {
+      flex: 1;
+      overflow-y: auto;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .chat-bubble {
+      max-width: 80%;
+      padding: 12px 16px;
+      border-radius: 8px;
+      line-height: 1.4;
+      font-size: 0.95rem;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    .chat-bubble.worker {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      align-self: flex-start;
+      border-top-left-radius: 0;
+      color: #e2e8f0;
+    }
+
+    .chat-bubble.supervisor {
+      background: var(--primary-light);
+      border: 1px solid var(--accent);
+      align-self: flex-end;
+      border-top-right-radius: 0;
+      color: var(--white);
+    }
+
+    .chat-avatar-name {
+      font-weight: bold;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .chat-avatar-name.w { color: var(--accent-light); }
+    .chat-avatar-name.s { color: var(--success); }
+
+    /* Dialog Choice Area */
+    .choices-area {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .choice-btn {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--white);
+      padding: 12px 16px;
+      cursor: pointer;
+      text-align: left;
+      font-size: 0.9rem;
+      line-height: 1.3;
+      transition: all 0.2s;
+    }
+
+    .choice-btn:hover {
+      background: var(--primary-light);
+      border-color: var(--accent);
+    }
+
+    /* Final Score Card overlay */
+    .finish-card {
+      text-align: center;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Role-play de Comunicación Constructiva</h1>
+      <p class="instructions">Caso: Pedro, operario electromecánico, está en un andamio de 3m con su línea de vida suelta. Aborde la desviación mediante liderazgo asertivo.</p>
+    </header>
+
+    <!-- Chat history -->
+    <div class="chat-history" id="chat-box">
+      <!-- Welcome/Initial message -->
+      <div class="chat-bubble worker">
+        <span class="chat-avatar-name w">👷 Pedro (Operario)</span>
+        Hola Ing. Qué tal. Ya casi acabo de reconectar este reflector, solo son 5 minutos. Engancharme me quita tiempo porque me ando moviendo de un lado al otro del andamio.
+      </div>
+    </div>
+
+    <!-- Choices control -->
+    <div class="choices-area" id="choices-box">
+      <!-- Options rendered here -->
+    </div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const participantId = urlParams.get('participantId') || 'ING-001';
+
+    const dialogueTree = {
+      start: {
+        choices: [
+          {
+            text: "A) 'Pedro, las normas no se discuten por tiempo. Te enganchas inmediatamente o te suspendo el permiso y te reporto con gerencia.'",
+            score: 15,
+            next: "step2_auth",
+            superText: "Pedro, las normas no se discuten por tiempo. Te enganchas inmediatamente o te suspendo el permiso y te reporto con gerencia."
+          },
+          {
+            text: "B) 'Bueno Pedro, ten cuidado por favor. Apúrate para que no nos retrasemos con el plan del día.'",
+            score: 10,
+            next: "step2_pass",
+            superText: "Bueno Pedro, ten cuidado por favor. Apúrate para que no nos retrasemos con el plan del día."
+          },
+          {
+            text: "C) 'Entiendo que engancharse y desengancharse reste agilidad, Pedro. Sin embargo, un tropezón toma solo un segundo y la consecuencia a 3 metros es grave. Busquemos juntos una eslinga graduable doble o línea de vida horizontal para que te muevas seguro. ¿Te parece?'",
+            score: 35,
+            next: "step2_assert",
+            superText: "Entiendo que engancharse y desengancharse reste agilidad, Pedro. Sin embargo, un tropezón toma solo un segundo y la consecuencia a 3 metros es grave. Busquemos juntos una eslinga graduable doble o línea de vida horizontal para que te muevas seguro. ¿Te parece?"
+          }
+        ]
+      },
+      
+      // Step 2 Branching Paths
+      step2_auth: {
+        workerText: "Uff, ya va, jefe. Siempre es lo mismo con la gente de seguridad... ya me conecté. Pero este mosquetón del arnés se atora y cuesta abrirlo, a ver si no me caigo por estar forcejeando con él.",
+        choices: [
+          {
+            text: "A) 'Es tu equipo asignado y debes cuidarlo. Trabaja con él o tendré que ponerte una amonestación por quejas.'",
+            score: 10,
+            next: "finish_auth",
+            superText: "Es tu equipo asignado y debes cuidarlo. Trabaja con él o tendré que ponerte una amonestación por quejas."
+          },
+          {
+            text: "B) 'Okey, repórtalo en el almacén al finalizar el turno nocturno.'",
+            score: 15,
+            next: "finish_med",
+            superText: "Okey, repórtalo en el almacén al finalizar el turno nocturno."
+          },
+          {
+            text: "C) 'Si el conector se atora, representa un riesgo de falla. Baja del andamio de forma segura ahora mismo; te conseguiré un arnés y mosquetón de triple acción nuevos en el almacén de inmediato.'",
+            score: 30,
+            next: "finish_assert_partial",
+            superText: "Si el conector se atora, representa un riesgo de falla. Baja del andamio de forma segura ahora mismo; te conseguiré un arnés y mosquetón de triple acción nuevos en el almacén de inmediato."
+          }
+        ]
+      },
+      step2_pass: {
+        workerText: "Sí Ing, yo me cuido solo, no se preocupe. Además este gancho está medio oxidado y a veces se traba, mejor ni lo muevo mucho.",
+        choices: [
+          {
+            text: "A) 'Si está oxidado no lo uses, te vas a caer. Bájate de ahí.'",
+            score: 20,
+            next: "finish_med",
+            superText: "Si está oxidado no lo uses, te vas a caer. Bájate de ahí."
+          },
+          {
+            text: "B) 'Está bien, solo ten cuidado al engancharte en la estructura.'",
+            score: 5,
+            next: "finish_fail",
+            superText: "Está bien, solo ten cuidado al engancharte en la estructura."
+          },
+          {
+            text: "C) 'Un gancho oxidado que se traba es inaceptable. Detén la labor inmediatamente Pedro. Baja con cuidado y reemplazamos ese equipo en almacén. Tu vida vale más que un retraso de 10 minutos.'",
+            score: 30,
+            next: "finish_assert_partial",
+            superText: "Un gancho oxidado que se traba es inaceptable. Detén la labor inmediatamente Pedro. Baja con cuidado y reemplazamos ese equipo en almacén. Tu vida vale más que un retraso de 10 minutos."
+          }
+        ]
+      },
+      step2_assert: {
+        workerText: "Bueno Ing, tiene razón. Se agradece que no solo venga a regañar. La verdad es que este mosquetón del arnés está duro y me cuesta abrirlo con guantes, por eso me da flojera engancharme.",
+        choices: [
+          {
+            text: "A) 'Debiste reportar ese fallo antes. Sube a almacén y que te den otro.'",
+            score: 15,
+            next: "finish_med",
+            superText: "Debiste reportar ese fallo antes. Sube a almacén y que te den otro."
+          },
+          {
+            text: "B) 'Usa fuerza o quítate los guantes un momento para ajustarlo.'",
+            score: 5,
+            next: "finish_fail",
+            superText: "Usa fuerza o quítate los guantes un momento para ajustarlo."
+          },
+          {
+            text: "C) 'Eso explica el problema. Un mosquetón defectuoso es un riesgo crítico de seguridad. Desciende con cuidado, Pedro; yo mismo te acompaño al almacén para entregarte un arnés con conectores de apertura suave homologados.'",
+            score: 35,
+            next: "finish_assert_perfect",
+            superText: "Eso explica el problema. Un mosquetón defectuoso es un riesgo crítico de seguridad. Desciende con cuidado, Pedro; yo mismo te acompaño al almacén para entregarte un arnés con conectores de apertura suave homologados."
+          }
+        ]
+      },
+      
+      // End outcomes
+      finish_auth: {
+        workerText: "Qué mal plan... Trabajo bajo protesta. Está bien, me engancho a la fuerza.",
+        scoreModifier: 5,
+        type: "Autocrático",
+        evalText: "Su estilo de comunicación es excesivamente Autocrático/Impositivo. Consigue obediencia temporal mediante amenazas, pero deteriora la confianza de los trabajadores y fomenta que oculten condiciones de riesgo por miedo a represalias."
+      },
+      finish_med: {
+        workerText: "Entendido, Ing. Trabajaré con cuidado lo que falta del turno.",
+        scoreModifier: 15,
+        type: "Directivo Estándar",
+        evalText: "Su estilo es Directivo Estándar. Cumple con corregir la desviación pero no profundiza en la causa raíz del por qué el trabajador omitía el protocolo de seguridad. Comunicación moderadamente asertiva."
+      },
+      finish_fail: {
+        workerText: "Bueno, ahí veo cómo le hago jefe. Gracias por dejarme acabar rápido.",
+        scoreModifier: 5,
+        type: "Permisivo / Pasivo",
+        evalText: "Su estilo de liderazgo es Peligrosamente Permisivo. Tolerar desviaciones o recomendar prácticas inseguras (como quitarse los guantes o usar ganchos oxidados) representa negligencia legal y expone al trabajador a un accidente mortal."
+      },
+      finish_assert_partial: {
+        workerText: "Muchas gracias, Ing. Qué bueno que entienda que si el equipo no sirve no se puede trabajar seguros. Voy a bajar para ir a almacén.",
+        scoreModifier: 25,
+        type: "Asertivo / Preventivo",
+        evalText: "Liderazgo Asertivo / Preventivo. Detiene el trabajo ante la presencia de un equipo defectuoso y prioriza el cambio inmediato. Demuestra que valora la integridad sobre la urgencia de entrega."
+      },
+      finish_assert_perfect: {
+        workerText: "De verdad le agradezco, Ing. Se nota que le interesa que regresemos completos a casa. Bajo de inmediato y hacemos el cambio de arnés.",
+        scoreModifier: 30,
+        type: "Liderazgo Transformacional EHS",
+        evalText: "¡Felicidades! Ha demostrado un Liderazgo Transformacional de Seguridad. Escuchó activamente la justificación del trabajador, descubrió una falla del equipo (causa raíz física) y actuó protegiendo la vida del colaborador mientras fortalecía la cultura preventiva."
+      }
+    };
+
+    let totalScore = 0;
+
+    function renderChoices(stepKey) {
+      const step = dialogueTree[stepKey];
+      const choicesBox = document.getElementById("choices-box");
+      choicesBox.innerHTML = "";
+      
+      if (!step || !step.choices) return;
+      
+      step.choices.forEach(choice => {
+        const btn = document.createElement("button");
+        btn.className = "choice-btn";
+        btn.textContent = choice.text;
+        btn.onclick = () => selectChoice(choice.score, choice.next, choice.superText);
+        choicesBox.appendChild(btn);
+      });
+    }
+
+    function selectChoice(score, nextKey, superText) {
+      totalScore += score;
+      
+      // Append supervisor response to chat
+      const chatBox = document.getElementById("chat-box");
+      
+      const supDiv = document.createElement("div");
+      supDiv.className = "chat-bubble supervisor";
+      supDiv.innerHTML = `<span class="chat-avatar-name s">👤 Supervisor (Usted)</span>${superText}`;
+      chatBox.appendChild(supDiv);
+      
+      // scroll to bottom
+      chatBox.scrollTop = chatBox.scrollHeight;
+      
+      // delay rendering next step
+      document.getElementById("choices-box").innerHTML = "<div style='color: var(--accent); font-weight: 500; font-size: 0.9rem'>Pedro está respondiendo...</div>";
+      
+      setTimeout(() => {
+        const nextStep = dialogueTree[nextKey];
+        
+        if (nextStep.workerText) {
+          // Normal dialogue step
+          const workDiv = document.createElement("div");
+          workDiv.className = "chat-bubble worker";
+          workDiv.innerHTML = `<span class="chat-avatar-name w">👷 Pedro</span>${nextStep.workerText}`;
+          chatBox.appendChild(workDiv);
+          chatBox.scrollTop = chatBox.scrollHeight;
+          
+          renderChoices(nextKey);
+        } else {
+          // Final outcome step
+          totalScore += nextStep.scoreModifier;
+          const finalScore = Math.min(100, totalScore);
+          
+          // Append final worker message
+          const workDiv = document.createElement("div");
+          workDiv.className = "chat-bubble worker";
+          workDiv.innerHTML = `<span class="chat-avatar-name w">👷 Pedro</span>${nextStep.workerText}`;
+          chatBox.appendChild(workDiv);
+          chatBox.scrollTop = chatBox.scrollHeight;
+          
+          // Render final score card
+          showFinalCard(nextStep.type, nextStep.evalText, finalScore);
+        }
+      }, 1200);
+    }
+
+    function showFinalCard(type, evaluation, score) {
+      const container = document.getElementById("choices-box");
+      container.innerHTML = "";
+      
+      const mainContainer = document.querySelector(".container");
+      mainContainer.innerHTML = `
+        <header>
+          <h1>Resultados de Role-play de Supervisión</h1>
+        </header>
+        <div class="finish-card">
+          <span style="font-size: 3rem;">🗣️</span>
+          <h3>Estilo Detectado: <span style="color: var(--accent-light)">${type}</span></h3>
+          <p style="font-size: 0.95rem; color: #cbd5e0; line-height: 1.4; text-align: justify;">${evaluation}</p>
+          <h2 style="color: var(--success); font-family: 'Barlow Condensed', sans-serif; font-size: 1.8rem; margin-top: 10px;">Calificación EHS: ${score} / 100</h2>
+          
+          <button class="action-btn" onclick="saveAndSync(${score})" style="margin-top: 14px;">Registrar Evaluación en Hub</button>
+        </div>
+      `;
+    }
+
+    function saveAndSync(score) {
+      if (window.parent && window.parent.participantManager) {
+        window.parent.participantManager.actualizarProgreso(participantId, 'rolplay', score);
+        if (window.parent.app && window.parent.app.showToast) {
+          window.parent.app.showToast({
+            type: 'success',
+            message: `¡Role-play de supervisión registrado! Nota: ${score}/100.`
+          });
+        }
+      } else {
+        alert(`Offline Mode: Score logged is ${score}/100.`);
+      }
+      
+      // Disable button
+      const btn = document.querySelector(".action-btn");
+      btn.disabled = true;
+      btn.textContent = "Resultados Sincronizados";
+    }
+
+    // Start
+    renderChoices("start");
+  </script>
+</body>
+</html>

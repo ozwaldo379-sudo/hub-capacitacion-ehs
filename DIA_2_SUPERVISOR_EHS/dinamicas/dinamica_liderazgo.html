@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dinámica 5: Liderazgo Operativo EHS | Vértice EHS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1B365D;
+      --primary-light: #2c4a75;
+      --accent: #ff6b35;
+      --accent-glow: rgba(255, 107, 53, 0.4);
+      --bg-dark: #091322;
+      --bg-card: rgba(18, 37, 67, 0.55);
+      --white: #ffffff;
+      --success: #3aaf6d;
+      --warning: #ed8936;
+      --error: #f56565;
+      --border: rgba(255, 255, 255, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+      background: var(--bg-card);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    header {
+      text-align: center;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 16px;
+    }
+
+    h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2rem;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .instructions {
+      font-size: 0.95rem;
+      color: #cbd5e0;
+      margin-top: 8px;
+    }
+
+    /* Stats bar */
+    .indicators-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .ind-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .ind-lbl {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      color: #cbd5e0;
+    }
+
+    .ind-val {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--accent-light);
+    }
+
+    .ind-val.high { color: var(--success); }
+    .ind-val.med { color: var(--warning); }
+    .ind-val.low { color: var(--error); }
+
+    /* Scenario Card */
+    .scenario-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 8px;
+    }
+
+    .sc-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.15rem;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+
+    .sc-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.3rem;
+      color: var(--white);
+    }
+
+    .sc-desc {
+      font-size: 0.95rem;
+      color: #e2e8f0;
+      line-height: 1.5;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .opt-btn {
+      background: var(--primary-light);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      color: var(--white);
+      padding: 14px 18px;
+      cursor: pointer;
+      text-align: left;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      transition: all 0.2s;
+    }
+
+    .opt-btn:hover {
+      border-color: var(--accent);
+      transform: translateX(4px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .opt-btn.selected {
+      background: var(--accent);
+      border-color: var(--white);
+    }
+
+    .feedback-box {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      display: none;
+    }
+
+    /* Action bar */
+    .action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .action-btn {
+      background: var(--accent);
+      border: none;
+      border-radius: 6px;
+      color: var(--white);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .action-btn:hover {
+      background: #e0531c;
+    }
+
+    .action-btn:disabled {
+      background: #4a5568;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Dilemas de Liderazgo: Detener o Autorizar</h1>
+      <p class="instructions">Usted es el Supervisor de EHS a cargo del proyecto. Enfréntese a 3 dilemas críticos en campo. Sus decisiones afectarán la seguridad de la obra, el avance del cronograma y su puntaje de liderazgo.</p>
+    </header>
+
+    <!-- Indicators Bar -->
+    <div class="indicators-bar">
+      <div class="ind-item">
+        <span class="ind-lbl">🛡️ Seguridad de Obra</span>
+        <span class="ind-val high" id="stat-safety">100%</span>
+      </div>
+      <div class="ind-item">
+        <span class="ind-lbl">⏱️ Avance Cronograma</span>
+        <span class="ind-val high" id="stat-schedule">100%</span>
+      </div>
+      <div class="ind-item">
+        <span class="ind-lbl">👑 EHS Liderazgo</span>
+        <span class="ind-val high" id="stat-leadership">100%</span>
+      </div>
+    </div>
+
+    <!-- Active Scenario -->
+    <div class="scenario-card" id="scenario-wrapper">
+      <div class="sc-header">
+        <span class="sc-num" id="sc-number">Dilema 1 de 3</span>
+      </div>
+      <h3 class="sc-title" id="sc-title">Cargando escenario...</h3>
+      <p class="sc-desc" id="sc-desc">Cargando...</p>
+      
+      <div class="options-list" id="options-container">
+        <!-- Loaded dynamically -->
+      </div>
+
+      <div class="feedback-box" id="feedback-wrapper">
+        <!-- Feedback text -->
+      </div>
+    </div>
+
+    <!-- Action Navigation -->
+    <div class="action-bar">
+      <div id="progression-text" style="font-size: 0.9rem; color: #a0aec0;">Paso 1 de 3</div>
+      <button class="action-btn" id="btn-next" disabled onclick="nextScenario()">Siguiente Dilema</button>
+    </div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const participantId = urlParams.get('participantId') || 'ING-001';
+
+    const scenarios = [
+      {
+        title: "Andamio sin cruceta de arriostramiento posterior",
+        desc: "Se requiere iniciar soldadura caliente de tuberías críticas a 6 metros de altura. El andamio tiene 3 cuerpos y carece de una cruceta estabilizadora trasera. El capataz indica que el andamio está firme y que detenerlo retrasará la jornada por 3 horas en la ruta crítica.",
+        options: [
+          {
+            text: "A) PARADA TOTAL: Detener los trabajos, aplicar tarjeta roja de bloqueo al andamio y exigir la colocación de la cruceta por el contratista antes de reanudar.",
+            impact: { safety: 0, schedule: -15, leadership: +15 },
+            feedback: "Excelente decisión de liderazgo. Un andamio incompleto es causa común de colapso. Aunque impacta el tiempo de avance de hoy, la seguridad es absoluta."
+          },
+          {
+            text: "B) TRABAJO CON MEDIDA COMPENSATORIA: Autorizar el trabajo restringiendo el movimiento y exigiendo que el soldador se ancle permanentemente de forma externa (línea de vida de viga estructural).",
+            impact: { safety: -15, schedule: 0, leadership: -5 },
+            feedback: "Decisión regular. Disminuye el peligro de caída del soldador mediante el anclaje directo, pero el andamio sigue estando mecánicamente inestable y propenso a desplome."
+          },
+          {
+            text: "C) AUTORIZAR CONTINUAR: Firmar el Permiso de Trabajo (AST) para evitar retrasar el proyecto crítico, confiando en la experiencia declarada por el soldador.",
+            impact: { safety: -40, schedule: +10, leadership: -35 },
+            feedback: "Falla crítica en EHS. Autorizar un trabajo con andamios defectuosos infringe directamente la NOM-009 y pone en riesgo mortal al trabajador por presiones de tiempo."
+          }
+        ]
+      },
+      {
+        title: "Lluvia y viento racheado súbito",
+        desc: "Un equipo de 4 montadores está instalando láminas metálicas en la cubierta del edificio principal (12 metros de altura). Empieza una lluvia ligera constante y ráfagas de viento de 42 km/h. La gerencia del proyecto presiona porque solo faltan 4 láminas para cerrar el techo y evitar filtraciones en equipos costosos.",
+        options: [
+          {
+            text: "A) SUSPENDER INMEDIATAMENTE: Ordenar el descenso ordenado y seguro del personal. Asegurar las herramientas e instalar mallas protectoras contra el viento. No reanudar hasta que cese la lluvia y el viento sea menor a 40 km/h.",
+            impact: { safety: 0, schedule: -20, leadership: +20 },
+            feedback: "¡Decisión EHS Correcta! Según la NOM-009, el trabajo en alturas debe suspenderse ante mal clima, lluvia o vientos superiores a 40 km/h. Los equipos costosos no valen vidas humanas."
+          },
+          {
+            text: "B) PERMITIR CERRAR RÁPIDAMENTE: Autorizar que monten solo las 4 láminas restantes con extrema precaución, y luego bajen por completo.",
+            impact: { safety: -30, schedule: +10, leadership: -15 },
+            feedback: "Peligro. Las láminas metálicas actúan como velas con vientos fuertes de 42 km/h, pudiendo arrojar a un trabajador al vacío. Tomar atajos al final del turno genera falsas confianzas."
+          },
+          {
+            text: "C) REUBICAR SIN DETENER: Pedirles que dejen el techo pero se queden colgados en la grúa de canastilla haciendo trabajos de remaches exteriores.",
+            impact: { safety: -25, schedule: -5, leadership: -10 },
+            feedback: "Acción peligrosa. Moverlos a canastilla elevada bajo lluvia y viento sigue incumpliendo las normas de paradas climáticas para izajes y alturas."
+          }
+        ]
+      },
+      {
+        title: "Arnés con argolla D dorsal levemente deformada",
+        desc: "Es el último día del turno nocturno. Un electricista nota que la argolla D dorsal de su arnés presenta una leve deformación por aparente golpe previo. No hay stock de repuestos en el almacén debido a que es fin de mes. Si el operario no sube a conectar las luminarias, el turno se irá a oscuras.",
+        options: [
+          {
+            text: "A) RECHAZAR EL EQUIPO: Cortar la argolla D dorsal para inutilizar el arnés, registrarlo como merma y suspender la tarea hasta que se consiga un arnés en óptimas condiciones de otra zona o almacén externo.",
+            impact: { safety: 0, schedule: -15, leadership: +15 },
+            feedback: "Acción correcta e instructiva. Inutilizar físicamente el equipo rechazado previene que otro operario lo use por error más tarde. La seguridad no se negocia por falta de inventario."
+          },
+          {
+            text: "B) UTILIZAR ARGOLLAS LATERALES: Permitir usar el mismo arnés, pero ordenando que se ancle de las argollas D laterales para posicionamiento en lugar de la dorsal.",
+            impact: { safety: -35, schedule: 0, leadership: -20 },
+            feedback: "Incumplimiento grave. Las argollas laterales son EXCLUSIVAMENTE para posicionamiento y restricción, NUNCA para detención de caídas. Un impacto ahí podría lesionar la columna del trabajador."
+          },
+          {
+            text: "C) INSPECCIÓN VISUAL INTERNA: Dejar que el trabajador decida si sube tras una rápida prueba de fuerza estática jalando la argolla manualmente.",
+            impact: { safety: -40, schedule: +10, leadership: -30 },
+            feedback: "Decisión inaceptable. Las pruebas mecánicas manuales son insuficientes para validar la fatiga del metal de una argolla D dorsal deformada."
+          }
+        ]
+      }
+    ];
+
+    let currentIdx = 0;
+    let safety = 100;
+    let schedule = 100;
+    let leadership = 100;
+    let selectedOptIdx = null;
+
+    function renderScenario() {
+      const sc = scenarios[currentIdx];
+      
+      document.getElementById("sc-number").textContent = `Dilema ${currentIdx + 1} de 3`;
+      document.getElementById("sc-title").textContent = sc.title;
+      document.getElementById("sc-desc").textContent = sc.desc;
+      document.getElementById("progression-text").textContent = `Paso ${currentIdx + 1} de 3`;
+      
+      const container = document.getElementById("options-container");
+      container.innerHTML = "";
+      
+      sc.options.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "opt-btn";
+        btn.textContent = opt.text;
+        btn.onclick = () => selectOption(idx);
+        container.appendChild(btn);
+      });
+      
+      document.getElementById("feedback-wrapper").style.display = "none";
+      document.getElementById("btn-next").disabled = true;
+      selectedOptIdx = null;
+    }
+
+    function selectOption(idx) {
+      if (selectedOptIdx !== null) return; // Lock options
+      selectedOptIdx = idx;
+      
+      const sc = scenarios[currentIdx];
+      const opt = sc.options[idx];
+      
+      // Update UI classes
+      const buttons = document.getElementById("options-container").children;
+      for (let i = 0; i < buttons.length; i++) {
+        buttons[i].disabled = true;
+        if (i === idx) {
+          buttons[i].classList.add("selected");
+        }
+      }
+      
+      // Apply impacts
+      safety = Math.max(0, Math.min(100, safety + opt.impact.safety));
+      schedule = Math.max(0, Math.min(100, schedule + opt.impact.schedule));
+      leadership = Math.max(0, Math.min(100, leadership + opt.impact.leadership));
+      
+      // Refresh stats display
+      updateStatsUI();
+      
+      // Render feedback
+      const fbBox = document.getElementById("feedback-wrapper");
+      fbBox.textContent = opt.feedback;
+      fbBox.style.display = "block";
+      
+      // Enable next step button
+      document.getElementById("btn-next").disabled = false;
+      
+      if (currentIdx === 2) {
+        document.getElementById("btn-next").textContent = "Finalizar y Evaluar";
+      }
+    }
+
+    function updateStatsUI() {
+      const sVal = document.getElementById("stat-safety");
+      const tVal = document.getElementById("stat-schedule");
+      const lVal = document.getElementById("stat-leadership");
+      
+      sVal.textContent = `${safety}%`;
+      tVal.textContent = `${schedule}%`;
+      lVal.textContent = `${leadership}%`;
+      
+      sVal.className = `ind-val ${safety >= 75 ? 'high' : safety >= 50 ? 'med' : 'low'}`;
+      tVal.className = `ind-val ${schedule >= 75 ? 'high' : schedule >= 50 ? 'med' : 'low'}`;
+      lVal.className = `ind-val ${leadership >= 75 ? 'high' : leadership >= 50 ? 'med' : 'low'}`;
+    }
+
+    function nextScenario() {
+      if (currentIdx < 2) {
+        currentIdx++;
+        renderScenario();
+      } else {
+        finishSimulator();
+      }
+    }
+
+    function finishSimulator() {
+      // Calculate final score
+      // Score will be based mainly on safety (40%) and leadership (60%)
+      const finalScore = Math.round((safety * 0.4) + (leadership * 0.6));
+      
+      // Save results
+      if (window.parent && window.parent.participantManager) {
+        window.parent.participantManager.actualizarProgreso(participantId, 'liderazgo', finalScore);
+        if (window.parent.app && window.parent.app.showToast) {
+          window.parent.app.showToast({
+            type: 'success',
+            message: `¡Simulador Liderazgo EHS completado! Calificación obtenida: ${finalScore}/100.`
+          });
+        }
+      } else {
+        alert(`Offline Mode: Score computed is ${finalScore}/100.`);
+      }
+
+      // Lock buttons
+      document.getElementById("btn-next").disabled = true;
+      document.getElementById("btn-next").textContent = "Puntaje Registrado";
+      
+      // Display final results card in body
+      document.getElementById("scenario-wrapper").innerHTML = `
+        <div style="text-align: center; padding: 20px;">
+          <span style="font-size: 3rem;">👑</span>
+          <h3 class="sc-title" style="margin-top: 10px;">Simulador de Dilemas Terminado</h3>
+          <p class="sc-desc" style="margin-top: 10px;">Sus estadísticas finales son:</p>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 6px;">
+            <div>Seguridad: <strong>${safety}%</strong></div>
+            <div>Cronograma: <strong>${schedule}%</strong></div>
+            <div>Liderazgo: <strong>${leadership}%</strong></div>
+          </div>
+          <h2 style="color: var(--accent); font-family: 'Barlow Condensed', sans-serif;">CALIFICACIÓN FINAL: ${finalScore} / 100</h2>
+        </div>
+      `;
+    }
+
+    // Start
+    renderScenario();
+  </script>
+</body>
+</html>

@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Administración y Monitoreo | Vértice EHS</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@700&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <style>
+    :root {
+      --navy-darkest: #04080e;
+      --navy-dark: #091322;
+      --navy: #122543;
+      --navy-mid: #1B365D;
+      --navy-light: #2c4a75;
+      --accent: #ff6b35;
+      --accent-light: #ff8c61;
+      --green: #2E8B57;
+      --green-light: #3aaf6d;
+      --white: #ffffff;
+      --off-white: #f0f4f8;
+      --muted: #8fa3bc;
+      --border: rgba(255, 255, 255, 0.07);
+      --glass: rgba(13, 31, 53, 0.65);
+    }
+
+    body.light-mode {
+      --navy-darkest: #f4f7fa;
+      --navy-dark: #e1e6eb;
+      --navy: #cfd8e3;
+      --navy-mid: #1B365D;
+      --navy-light: #4a6fa5;
+      --white: #122543;
+      --off-white: #1b365d;
+      --muted: #5a6e85;
+      --border: rgba(18, 37, 67, 0.1);
+      --glass: rgba(225, 230, 235, 0.85);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--navy-darkest);
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      min-height: 100vh;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 16px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+    }
+
+    h1 span {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: bold;
+      color: var(--accent);
+      text-transform: uppercase;
+      font-size: 1.8rem;
+    }
+
+    .btn {
+      background: var(--navy-mid);
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      color: var(--white);
+      padding: 10px 18px;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background: var(--navy-light);
+      transform: translateY(-1px);
+    }
+
+    .btn-danger {
+      border-color: #f56565;
+      background: rgba(245, 101, 101, 0.1);
+    }
+    
+    .btn-danger:hover {
+      background: #f56565;
+    }
+
+    /* Cards and Grids */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .grid-3, .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.25rem;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+
+    /* Stats numbers */
+    .stat-number {
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: var(--white);
+      font-family: 'Barlow Condensed', sans-serif;
+    }
+
+    .stat-lbl {
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      font-family: 'Barlow Condensed', sans-serif;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    td {
+      font-size: 0.95rem;
+    }
+
+    .badge {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .badge.acreditado {
+      background: rgba(58, 175, 109, 0.2);
+      color: var(--green-light);
+      border: 1px solid var(--green-light);
+    }
+
+    .badge.no-acreditado {
+      background: rgba(245, 101, 101, 0.2);
+      color: #f56565;
+      border: 1px solid #f56565;
+    }
+
+    .theme-btn {
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--white);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="header-row">
+      <div>
+        <h1>Vértice EHS <span>Facilitador Admin</span></h1>
+        <p style="font-size: 0.9rem; color: var(--muted)">Monitoreo de Exámenes Finales y Brechas Preventivas en Tiempo Real</p>
+      </div>
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <button class="theme-btn" onclick="toggleTheme()" id="themeToggle">☀️</button>
+        <a href="../index.html" class="btn"><i class="fa-solid fa-house"></i> Volver al Hub</a>
+      </div>
+    </header>
+
+    <!-- Stats summary grid -->
+    <div class="grid-3">
+      <div class="card" style="display: flex; align-items: center; gap: 16px;">
+        <div style="font-size: 2.5rem; color: var(--accent)">📝</div>
+        <div>
+          <div class="stat-number" id="stat-total-exams">0</div>
+          <div class="stat-lbl">Exámenes Presentados</div>
+        </div>
+      </div>
+      <div class="card" style="display: flex; align-items: center; gap: 16px;">
+        <div style="font-size: 2.5rem; color: var(--green-light)">🏆</div>
+        <div>
+          <div class="stat-number" id="stat-avg-score">0%</div>
+          <div class="stat-lbl">Promedio de Aciertos</div>
+        </div>
+      </div>
+      <div class="card" style="display: flex; align-items: center; gap: 16px;">
+        <div style="font-size: 2.5rem; color: var(--accent-light)">🤝</div>
+        <div>
+          <div class="stat-number" id="stat-acred-pct">0%</div>
+          <div class="stat-lbl">Tasa de Acreditación</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Tables and Charts -->
+    <div class="grid-2">
+      <!-- Exam records list -->
+      <div class="card">
+        <div class="card-title">📋 Historial de Exámenes Finales</div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Ingeniero</th>
+                <th>Fecha</th>
+                <th>Calificación</th>
+                <th>Resultado</th>
+              </tr>
+            </thead>
+            <tbody id="exam-records-body">
+              <tr>
+                <td colspan="4" style="text-align: center; color: var(--muted)">No hay registros de examen guardados.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div style="display: flex; gap: 12px; margin-top: 20px; border-top: 1px solid var(--border); padding-top: 16px;">
+          <button class="btn" onclick="loadMockFacilitatorData()"><i class="fa-solid fa-users-gear"></i> Cargar Datos Demo</button>
+          <button class="btn btn-danger" onclick="clearAllData()"><i class="fa-solid fa-trash-can"></i> Limpiar Todo</button>
+        </div>
+      </div>
+
+      <!-- Consolidated gaps analysis chart -->
+      <div class="card" style="display: flex; flex-direction: column;">
+        <div class="card-title">📊 Fortalezas y Brechas por Módulo</div>
+        <div style="flex: 1; position: relative; min-height: 250px;">
+          <canvas id="gapsChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const EXAM_DB_KEY = 'ehs_exam_database';
+    let chartInstance = null;
+
+    // Load data from LocalStorage
+    function loadAdminDashboard() {
+      let raw = localStorage.getItem(EXAM_DB_KEY) || "[]";
+      let records = JSON.parse(raw);
+      
+      // Update statistics card values
+      document.getElementById("stat-total-exams").textContent = records.length;
+      
+      if (records.length > 0) {
+        let totalScore = 0;
+        let approvedCount = 0;
+        
+        records.forEach(r => {
+          totalScore += r.score;
+          if (r.aprobado) approvedCount++;
+        });
+        
+        const avg = Math.round(totalScore / records.length);
+        const rate = Math.round((approvedCount / records.length) * 100);
+        
+        document.getElementById("stat-avg-score").textContent = `${avg}%`;
+        document.getElementById("stat-acred-pct").textContent = `${rate}%`;
+        
+        // Populate records table
+        const tbody = document.getElementById("exam-records-body");
+        tbody.innerHTML = "";
+        
+        records.forEach(r => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td><strong>${r.participantId}</strong></td>
+            <td>${new Date(r.examDate).toLocaleDateString()}</td>
+            <td style="font-weight: bold; color: ${r.score >= 70 ? 'var(--green-light)' : '#f56565'}">${r.score}%</td>
+            <td><span class="badge ${r.aprobado ? 'acreditado' : 'no-acreditado'}">${r.aprobado ? 'Acreditado' : 'No Acreditado'}</span></td>
+          `;
+          tbody.appendChild(tr);
+        });
+        
+        renderGapsChart(records);
+      } else {
+        document.getElementById("stat-avg-score").textContent = "0%";
+        document.getElementById("stat-acred-pct").textContent = "0%";
+        document.getElementById("exam-records-body").innerHTML = `
+          <tr>
+            <td colspan="4" style="text-align: center; color: var(--muted)">No hay registros de examen guardados.</td>
+          </tr>
+        `;
+        if (chartInstance) {
+          chartInstance.destroy();
+          chartInstance = null;
+        }
+      }
+    }
+
+    function renderGapsChart(records) {
+      const ctx = document.getElementById('gapsChart').getContext('2d');
+      if (chartInstance) {
+        chartInstance.destroy();
+      }
+
+      // Aggregate correct answers by module
+      // We will sum up correct selections across all records
+      const moduleStats = {
+        'Normativa (A)': { correct: 0, total: 0 },
+        'Riesgos (A)': { correct: 0, total: 0 },
+        'EPP (A)': { correct: 0, total: 0 },
+        'Supervisión (B)': { correct: 0, total: 0 },
+        'Investigación (B)': { correct: 0, total: 0 }
+      };
+
+      records.forEach(record => {
+        if (record.correctLog && Array.isArray(record.correctLog)) {
+          // If detailed log exists
+          record.correctLog.forEach(log => {
+            const mod = getModuleGroup(log.module);
+            if (moduleStats[mod]) {
+              moduleStats[mod].total++;
+              if (log.correct) {
+                moduleStats[mod].correct++;
+              }
+            }
+          });
+        } else {
+          // Fallback static metrics
+          const isA = record.score >= 70;
+          moduleStats['Normativa (A)'].correct += isA ? 8 : 4;
+          moduleStats['Normativa (A)'].total += 10;
+          moduleStats['Riesgos (A)'].correct += isA ? 9 : 5;
+          moduleStats['Riesgos (A)'].total += 10;
+          moduleStats['EPP (A)'].correct += isA ? 9 : 6;
+          moduleStats['EPP (A)'].total += 10;
+          moduleStats['Supervisión (B)'].correct += isA ? 8 : 4;
+          moduleStats['Supervisión (B)'].total += 10;
+          moduleStats['Investigación (B)'].correct += isA ? 7 : 3;
+          moduleStats['Investigación (B)'].total += 10;
+        }
+      });
+
+      const labels = Object.keys(moduleStats);
+      const data = labels.map(l => {
+        const stats = moduleStats[l];
+        return stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+      });
+
+      chartInstance = new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Precisión del Grupo (%)',
+            data: data,
+            backgroundColor: 'rgba(255, 107, 53, 0.2)',
+            borderColor: '#ff6b35',
+            borderWidth: 2,
+            pointBackgroundColor: '#ff8c61'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              angleLines: { color: 'rgba(255,255,255,0.1)' },
+              grid: { color: 'rgba(255,255,255,0.1)' },
+              pointLabels: { color: 'var(--white)', font: { size: 11 } },
+              ticks: { display: false },
+              min: 0,
+              max: 100
+            }
+          },
+          plugins: {
+            legend: { display: false }
+          }
+        }
+      });
+    }
+
+    function getModuleGroup(moduleKey) {
+      if (!moduleKey) return 'Normativa (A)';
+      if (moduleKey.includes('normas') || moduleKey.includes('introduccion')) return 'Normativa (A)';
+      if (moduleKey.includes('riesgos') || moduleKey.includes('peligros')) return 'Riesgos (A)';
+      if (moduleKey.includes('epp') || moduleKey.includes('equipos')) return 'EPP (A)';
+      if (moduleKey.includes('roles') || moduleKey.includes('liderazgo')) return 'Supervisión (B)';
+      if (moduleKey.includes('investigacion') || moduleKey.includes('auditorias')) return 'Investigación (B)';
+      return 'Normativa (A)';
+    }
+
+    // Load mock database entries
+    function loadMockFacilitatorData() {
+      const mockData = [
+        {
+          participantId: "Ing. Carlos Mendoza",
+          examDate: new Date(Date.now() - 3600000 * 24).toISOString(),
+          score: 92,
+          aprobado: true,
+          timeSpent: "24m 12s",
+          safetyBreaches: 0
+        },
+        {
+          participantId: "Ing. Andrea Ruiz",
+          examDate: new Date(Date.now() - 3600000 * 2).toISOString(),
+          score: 78,
+          aprobado: true,
+          timeSpent: "28m 45s",
+          safetyBreaches: 0
+        }
+      ];
+      localStorage.setItem(EXAM_DB_KEY, JSON.stringify(mockData));
+      
+      // Also write training state if it doesn't exist to sync names
+      const trainingKey = 'ehs_training_state';
+      if (!localStorage.getItem(trainingKey)) {
+        const state = {
+          participants: [
+            { id: 'ING-001', nombre: 'Carlos Mendoza', email: 'carlos.mendoza@verticeehs.com', dia1_completado: true, dia1_progreso: 100, dia2_completado: true, dia2_progreso: 100, simulador_riesgos_score: 90, dinamica_epp_score: 95, simulador_arnes_score: 100, dinamica_investigacion_score: 85, dinamica_liderazgo_score: 90, rol_play_supervisor_score: 95, examen_pendiente: false, examen_score: 92, examen_aprobado: true, notas_facilitador: 'Excelente desempeño.' },
+            { id: 'ING-002', nombre: 'Andrea Ruiz', email: 'andrea.ruiz@verticeehs.com', dia1_completado: true, dia1_progreso: 100, dia2_completado: true, dia2_progreso: 90, simulador_riesgos_score: 80, dinamica_epp_score: 85, simulador_arnes_score: 90, dinamica_investigacion_score: 80, dinamica_liderazgo_score: 75, rol_play_supervisor_score: 80, examen_pendiente: false, examen_score: 78, examen_aprobado: true, notas_facilitador: 'Cumple con los perfiles.' }
+          ]
+        };
+        localStorage.setItem(trainingKey, JSON.stringify(state));
+      }
+      
+      loadAdminDashboard();
+    }
+
+    function clearAllData() {
+      if (confirm("¿Estás seguro de que deseas eliminar todas las calificaciones de exámenes del sistema?")) {
+        localStorage.removeItem(EXAM_DB_KEY);
+        loadAdminDashboard();
+      }
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle("light-mode");
+      const isLight = document.body.classList.contains("light-mode");
+      document.getElementById("themeToggle").textContent = isLight ? "🌙" : "☀️";
+    }
+
+    window.onload = loadAdminDashboard;
+  </script>
+</body>
+</html>

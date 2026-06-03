@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ & Soporte Técnico | Vértice EHS Academy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1B365D;
+      --primary-light: #2c4a75;
+      --accent: #ff6b35;
+      --bg-dark: #091322;
+      --white: #ffffff;
+      --border: rgba(255, 255, 255, 0.08);
+      --muted: #8fa3bc;
+      --warning: #ed8936;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      padding: 30px 20px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: rgba(18, 37, 67, 0.4);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    header {
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 16px;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2rem;
+      text-transform: uppercase;
+    }
+
+    .faq-item {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.01);
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .faq-question {
+      padding: 16px;
+      cursor: pointer;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.15rem;
+      text-transform: uppercase;
+      font-weight: bold;
+      color: var(--accent-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .faq-question:hover {
+      background: rgba(255, 107, 53, 0.05);
+    }
+
+    .faq-answer {
+      padding: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 0.95rem;
+      color: #cbd5e0;
+      display: none;
+      background: rgba(0, 0, 0, 0.15);
+    }
+
+    .faq-item.active .faq-answer {
+      display: block;
+    }
+
+    .faq-item.active .faq-question i {
+      transform: rotate(180deg);
+    }
+
+    .faq-question i {
+      transition: transform 0.2s;
+    }
+
+    .support-footer {
+      background: rgba(237, 137, 54, 0.05);
+      border: 1px dashed var(--warning);
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 0.85rem;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Preguntas Frecuentes & Soporte Técnico</h1>
+      <p style="color: var(--muted); font-size: 0.9rem;">Resolución de problemas técnicos del Hub EHS Offline</p>
+    </header>
+
+    <!-- FAQ List -->
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-question">
+        <span>❓ ¿Cómo limpio las calificaciones de los exámenes o reinicio el programa completo?</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </div>
+      <div class="faq-answer">
+        Para reiniciar las calificaciones de los exámenes, navegue a la pestaña **Examen Admin** del menú lateral izquierdo y haga clic en **Habilitar Retoma** para el ingeniero deseado, o bien en la sección inferior de calificaciones use el botón de **Limpiar base de datos** del panel de facilitador. Para borrar por completo todo el progreso (incluyendo dinámicas y asistencia), use el botón rojo **Reiniciar Hub** en la parte inferior del menú lateral.
+      </div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-question">
+        <span>❓ El reporte PDF no se descarga cuando doy clic al botón. ¿Qué ocurre?</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </div>
+      <div class="faq-answer">
+        Esto suele ocurrir por dos motivos:
+        1. **Bloqueador de ventanas emergentes:** Algunos navegadores interpretan la descarga de PDFs local como una ventana emergente. Habilite los permisos de pop-ups para archivos locales.
+        2. **Carga de CDN bloqueada:** El script de exportación PDF utiliza las librerías `jsPDF` y `html2canvas` vía CDN externo. Asegúrese de que el dispositivo tenga acceso inicial a internet para cargar el script, o guarde el archivo de la biblioteca localmente en la carpeta si planea estar en un área totalmente sin cobertura de red.
+      </div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-question">
+        <span>❓ ¿Qué pasa si el ingeniero recarga la pestaña por error durante el examen?</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </div>
+      <div class="faq-answer">
+        No se preocupe. El motor del examen cuenta con un **sistema de autoguardado de sesión** que escribe el estado del test en la memoria del navegador cada 30 segundos y en cada respuesta. Al recargar la página `SISTEMA_EXAMEN/exam.html`, el sistema detectará el examen inconcluso y le preguntará al usuario: **'¿Desea reanudar el examen pendiente?'**. Al aceptar, se restaurará el temporizador y el avance exacto.
+      </div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-question">
+        <span>❓ ¿El Hub y los simuladores son compatibles con tabletas táctiles o iPads?</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </div>
+      <div class="faq-answer">
+        Sí, el sistema está diseñado bajo el enfoque **Mobile-First**. Todos los componentes de las dinámicas (como el arrastre de causas en Ishikawa o la selección de EPP) admiten eventos touch, y el layout de los cards se apilará automáticamente en vertical en pantallas menores a 768px de ancho.
+      </div>
+    </div>
+
+    <div class="support-footer">
+      <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.5rem; color: var(--warning)"></i>
+      <div>
+        <strong>Nota importante de compatibilidad:</strong> Se recomienda encarecidamente utilizar las versiones estables de **Google Chrome 90+** o **Mozilla Firefox 88+** para garantizar el correcto renderizado de los reportes vectoriales y gráficos comparativos de Chart.js.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleFaq(el) {
+      el.classList.toggle("active");
+    }
+  </script>
+</body>
+</html>

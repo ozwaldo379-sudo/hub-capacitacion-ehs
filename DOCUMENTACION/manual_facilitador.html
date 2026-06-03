@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual del Facilitador | Vértice EHS Academy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1B365D;
+      --primary-light: #2c4a75;
+      --accent: #ff6b35;
+      --bg-dark: #091322;
+      --white: #ffffff;
+      --border: rgba(255, 255, 255, 0.08);
+      --muted: #8fa3bc;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      line-height: 1.6;
+      padding: 40px 24px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: rgba(18, 37, 67, 0.4);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    header {
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      margin-bottom: 8px;
+    }
+
+    h1 span {
+      font-family: 'Barlow Condensed', sans-serif;
+      color: var(--accent);
+    }
+
+    h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-top: 30px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+    }
+
+    h3 {
+      font-size: 1.15rem;
+      margin-top: 20px;
+      margin-bottom: 8px;
+      color: #ff8c61;
+    }
+
+    p, ul {
+      margin-bottom: 16px;
+      color: #e2e8f0;
+      font-size: 0.98rem;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    .note-box {
+      background: rgba(255, 107, 53, 0.08);
+      border-left: 4px solid var(--accent);
+      padding: 16px;
+      border-radius: 4px;
+      margin: 20px 0;
+    }
+
+    .kbd {
+      background: var(--primary-light);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 0.85rem;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Manual del Facilitador EHS</h1>
+      <p style="color: var(--muted); font-size: 1rem;">Guía de Conducción del Sistema Integral de Capacitación y Evaluación</p>
+    </header>
+
+    <h2>1. Introducción al Sistema</h2>
+    <p>El <strong>Hub Central de Capacitación Integral EHS</strong> es una plataforma de software diseñada para operar completamente sin conexión (offline). Centraliza todo el contenido requerido para capacitar a dos ingenieros (Carlos Mendoza y Andrea Ruiz, o perfiles personalizados) durante las 9 horas totales del programa.</p>
+
+    <h2>2. Flujo Metodológico Sugerido</h2>
+    <p>Siga esta secuencia ordenada durante las sesiones presenciales:</p>
+    <ul>
+      <li><strong>Paso 1: Configuración Inicial:</strong> Abra el Hub Central (index.html). Vaya a la sección de 'Participantes' y registre los nombres y correos oficiales de los ingenieros evaluados.</li>
+      <li><strong>Paso 2: Día 1 - Trabajo en Alturas (4h):</strong> Abra la presentación teórica del Día 1. A lo largo de la presentación, detenga la explicación en los puntos indicados para realizar las dinámicas 1 (Identificación de riesgos), 2 (Selección de EPP) y 3 (Inspección de arnés).</li>
+      <li><strong>Paso 3: Consola del Facilitador:</strong> Antes de lanzar cada dinámica interactiva en el proyector de clase, recuerde seleccionar en la <strong>Consola del Facilitador</strong> (ubicada en el dashboard de index.html) el nombre del ingeniero que está jugando actualmente. Esto garantiza que la calificación de la simulación se guarde en su perfil correspondiente de LocalStorage de forma inmediata.</li>
+      <li><strong>Paso 4: Día 2 - Supervisor EHS (5h):</strong> Imparta la segunda jornada y aplique de la misma manera las dinámicas 4 (Ishikawa), 5 (Liderazgo) y 6 (Role-play).</li>
+      <li><strong>Paso 5: Examen Adaptativo Final:</strong> Una vez concluidas las 9 horas de capacitación y sus 6 dinámicas prácticas, habilite el examen final en la tableta o computadora del alumno ingresando su respectivo nombre.</li>
+      <li><strong>Paso 6: Reportes de Competencia:</strong> Descargue las actas individuales y el acta corporativa comparativa en PDF. Recabe firmas físicas y resguarde los archivos.</li>
+    </ul>
+
+    <h2>3. Detalle de las Dinámicas</h2>
+    <h3>Dinámica 1: Identificación de Riesgos</h3>
+    <p>El alumno debe hacer clic en 5 zonas de la torre de construcción que representan fallas de seguridad a la altura (NOM-009). Pídale al ingeniero que justifique oralmente la gravedad del riesgo antes de seleccionarla.</p>
+
+    <h3>Dinámica 3: Inspección de Arnés</h3>
+    <p>Fomente el debate grupal. El simulador presenta las condiciones físicas de 6 componentes críticos (D-ring, costuras, cintas de piernas). El alumno debe decidir si el arnés pasa la inspección visual periódica o si debe mandarse a destruir.</p>
+
+    <h3>Dinámica 6: Role-play de Supervisión</h3>
+    <p>Dinámica de comunicación asertiva. El evaluado debe convencer a 'Pedro' de engancharse a la línea de vida usando empatía e inteligencia emocional en lugar de autoritarismo.</p>
+
+    <div class="note-box">
+      <strong>⚠️ Nota Crítica de Persistencia:</strong> Toda la información de las dinámicas se guarda de forma segura en la memoria de LocalStorage del navegador del facilitador. No use el modo de navegación incógnito o privado, ya que esto eliminará los avances al cerrar la pestaña.
+    </div>
+
+    <h2>4. Atajos Rápidos del Teclado</h2>
+    <p>Use estos atajos directos en el Hub Central para agilizar la navegación en el aula:</p>
+    <ul>
+      <li><span class="kbd">?</span> : Abre el panel emergente de ayuda y atajos de teclado.</li>
+      <li><span class="kbd">1</span> : Abre la Presentación A del Día 1 en una pestaña externa.</li>
+      <li><span class="kbd">2</span> : Abre la Presentación B del Día 2 en una pestaña externa.</li>
+      <li><span class="kbd">R</span> : Acceso directo a la pestaña de reportes consolidados para mostrar las gráficas.</li>
+      <li><span class="kbd">Esc</span> : Cierra inmediatamente cualquier ventana emergente o simulador activo.</li>
+    </ul>
+  </div>
+
+</body>
+</html>

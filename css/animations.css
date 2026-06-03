@@ -1,0 +1,170 @@
+/* ==========================================================================
+   VÉRTICE EHS - CAPACITACIÓN INTEGRAL
+   ANIMATIONS & TRANSITIONS (animations.css)
+   ========================================================================== */
+
+/* Fade animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide in/out for toasts */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(100%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%) scale(0.9);
+  }
+}
+
+/* Pulse keyframes for timer warnings */
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 107, 53, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(255, 107, 53, 0.2);
+  }
+}
+
+@keyframes pulseGlowGreen {
+  0% {
+    box-shadow: 0 0 5px rgba(58, 175, 109, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(58, 175, 109, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(58, 175, 109, 0.2);
+  }
+}
+
+@keyframes ringPulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.5;
+  }
+}
+
+/* Float animation for decorative items */
+@keyframes floatUp {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Spinning keyframes */
+@keyframes rotateSpinner {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* CSS classes to apply the animations */
+.anim-fade-in {
+  animation: fadeIn 0.4s ease both;
+}
+
+.anim-fade-up {
+  animation: fadeUp 0.5s cubic-bezier(0.1, 0.9, 0.2, 1) both;
+}
+
+.anim-fade-down {
+  animation: fadeDown 0.5s cubic-bezier(0.1, 0.9, 0.2, 1) both;
+}
+
+.anim-pulse-glow {
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+.anim-pulse-glow-green {
+  animation: pulseGlowGreen 2s infinite ease-in-out;
+}
+
+.anim-float {
+  animation: floatUp 6s ease-in-out infinite;
+}
+
+.anim-spin {
+  animation: rotateSpinner 1s linear infinite;
+}
+
+/* Animation delays */
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+
+/* Micro-interaction hovers */
+.hover-grow {
+  transition: transform 0.2s cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+.hover-grow:hover {
+  transform: scale(1.03);
+}
+
+.hover-glow {
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.hover-glow:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 15px var(--color-accent-glow);
+}
