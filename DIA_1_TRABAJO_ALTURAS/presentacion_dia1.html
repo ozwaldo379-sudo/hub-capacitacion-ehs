@@ -4,17 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NOM-009-STPS-2011 - Trabajos en Altura - Vértice EHS</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500&family=Playfair+Display:wght@700;900&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --navy-darkest:#080f1a; --navy-dark:#0d1f35; --navy:#1B365D; --navy-mid:#24487a;
-  --green:#2E8B57; --green-light:#3aaf6d; --green-dark:#1a6a3f;
-  --gold:#C9A961; --gold-light:#dfc07a; --gold-dim:rgba(201,169,97,.12);
-  --white:#ffffff; --off-white:#f0f4f8; --muted:#8fa3bc; --border:rgba(255,255,255,.07);
-  --red:#e05252; --amber:#e09652; --blue:#5b9bd5;
+  --navy-darkest:#030508; --navy-dark:#0a0e14; --navy:#0d121c; --navy-mid:#161f30;
+  --green:#2E9E3C; --green-light:#44c754; --green-dark:#1f6b28;
+  --gold:#C9A961; --gold-light:#dfc07a; --gold-dim:rgba(201, 169, 97, 0.12);
+  --white:#F8FAFC; --off-white:#f1f5f9; --muted:#94A3B8; --border:rgba(255, 255, 255, 0.07);
+  --red:#E86650; --amber:#e09652; --blue:#3b82f6;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100%;height:100%;overflow:hidden;background:#000;color:var(--white);font-family:'Barlow';user-select:none}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;color:var(--white);font-family:'Inter', 'Barlow', sans-serif;user-select:none}
 body{letter-spacing:0}
 .deck{position:relative;width:100vw;height:100vh;background:var(--navy-darkest)}
 .slide{position:absolute;inset:0;display:flex;opacity:0;transform:translate3d(100%,0,0);transition:transform 380ms cubic-bezier(0.4,0,0.2,1),opacity 380ms cubic-bezier(0.4,0,0.2,1);overflow:hidden;padding:70px 92px 76px;background:var(--navy-darkest)}
@@ -23,24 +23,25 @@ body{letter-spacing:0}
 .slide.future{opacity:0;transform:translate3d(100%,0,0);z-index:1}
 .bg-dots{position:absolute;inset:0;opacity:.035;background-image:radial-gradient(circle at 1px 1px, #fff 1px, transparent 0);background-size:34px 34px;pointer-events:none}
 .orb{position:absolute;border-radius:999px;filter:blur(8px);pointer-events:none}
-.orb.green{width:560px;height:560px;left:-190px;bottom:-210px;background:radial-gradient(circle,rgba(46,139,87,.18),transparent 68%)}
+.orb.green{width:560px;height:560px;left:-190px;bottom:-210px;background:radial-gradient(circle,rgba(46,158,60,.18),transparent 68%)}
 .orb.gold{width:520px;height:520px;right:-170px;top:-190px;background:radial-gradient(circle,rgba(201,169,97,.10),transparent 70%)}
 .logo{height:64px;width:auto;object-fit:contain;filter:drop-shadow(0 12px 28px rgba(0,0,0,.35))}
 .logo.small{height:38px;position:absolute;top:28px;left:42px;opacity:.94}
 .kicker{font-family:'Barlow Condensed';font-weight:800;color:var(--green-light);font-size:15px;letter-spacing:4px;text-transform:uppercase;margin-bottom:14px}
-h1,h2{font-family:'Playfair Display';font-weight:900;line-height:.98;letter-spacing:0}
+h1,h2{font-family:'Manrope', 'Playfair Display', sans-serif;font-weight:800;line-height:.98;letter-spacing:-0.02em}
 h1{font-size:88px;text-align:center} h2{font-size:clamp(42px,4.2vw,70px)}
 p{font-size:22px;line-height:1.42;color:var(--muted);font-weight:300}
 .badge{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(201,169,97,.45);background:var(--gold-dim);color:var(--gold-light);font-family:'Barlow Condensed';font-weight:800;font-size:16px;letter-spacing:3px;text-transform:uppercase;border-radius:999px;padding:8px 20px}
 .rule{width:84px;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--green),var(--gold));margin:24px 0}
 .center{align-items:center;justify-content:center;text-align:center;flex-direction:column}
 .meta{display:flex;gap:30px;margin-top:42px;justify-content:center;flex-wrap:wrap}
-.meta div{border:1px solid var(--border);background:rgba(27,54,93,.42);border-radius:8px;padding:13px 22px;min-width:210px;font-family:'Barlow Condensed';font-weight:700;font-size:18px;color:var(--off-white)}
+.meta div{border:1px solid var(--border);background:rgba(10,14,20,0.5);border-radius:8px;padding:13px 22px;min-width:210px;font-family:'Barlow Condensed';font-weight:700;font-size:18px;color:var(--off-white)}
 .decor{position:absolute;right:44px;bottom:-38px;font-family:'Barlow Condensed';font-weight:800;font-size:220px;color:#fff;opacity:.04;line-height:1;z-index:0}
 .content{position:relative;z-index:2;width:100%;height:100%;display:flex;flex-direction:column}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:58px;align-items:center;flex:1}
 .grid{display:grid;gap:20px;flex:1;width:100%} .g2{grid-template-columns:1fr 1fr} .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)}
-.card{background:linear-gradient(160deg,rgba(27,54,93,.74),rgba(13,31,53,.72));border:1px solid var(--border);border-radius:8px;padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.18)}
+.card{background:rgba(10,14,20,0.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:16px;padding:24px;box-shadow:0 4px 30px rgba(0,0,0,0.4);transition:transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease;}
+.card:hover{transform:translateY(-4px);box-shadow:0 10px 40px rgba(0,0,0,0.6);border-color:rgba(255,255,255,0.15);}
 .card.gold{border-left:5px solid var(--gold)} .card.green{border-left:5px solid var(--green)} .card.blue{border-left:5px solid var(--blue)} .card.red{border-left:5px solid var(--red)} .card.amber{border-left:5px solid var(--amber)}
 .card h3{font-family:'Barlow Condensed';font-size:27px;line-height:1.05;color:var(--white);font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
 .card p,.card li{font-size:18px;line-height:1.36;color:var(--muted)}
@@ -48,11 +49,11 @@ ul{list-style:none;display:grid;gap:14px} li{font-size:21px;line-height:1.28;col
 .check li{position:relative;padding-left:34px;animation:rise .55s ease both} .check li:before{content:'✓';position:absolute;left:0;top:-2px;color:var(--green-light);font-family:'Barlow Condensed';font-weight:800;font-size:26px}
 .check li:nth-child(1){animation-delay:.1s}.check li:nth-child(2){animation-delay:.2s}.check li:nth-child(3){animation-delay:.3s}.check li:nth-child(4){animation-delay:.4s}.check li:nth-child(5){animation-delay:.5s}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-.big-quote{font-family:'Playfair Display';font-size:40px;line-height:1.25;color:var(--off-white);max-width:1180px;margin:auto;text-align:center}
+.big-quote{font-family:'Manrope', sans-serif;font-size:40px;line-height:1.25;color:var(--off-white);max-width:1180px;margin:auto;text-align:center}
 .highlight{color:var(--gold-light);font-size:1.7em;font-weight:900}
 .note-gold{border:1px solid rgba(201,169,97,.32);background:rgba(201,169,97,.10);border-radius:8px;padding:20px 24px;color:var(--gold-light);font-size:22px;line-height:1.35}
 .apply{display:grid;grid-template-columns:1fr 1fr;gap:28px;flex:1} .apply .head{font-family:'Barlow Condensed';font-size:32px;font-weight:800;margin-bottom:18px}
-.yes{border-color:rgba(46,139,87,.38)} .no{border-color:rgba(224,82,82,.35)} .yes .head{color:var(--green-light)} .no .head{color:#ff8c8c}
+.yes{border-color:rgba(46,158,60,0.38)} .no{border-color:rgba(224,82,82,.35)} .yes .head{color:var(--green-light)} .no .head{color:#ff8c8c}
 .icon{font-size:42px;display:block;margin-bottom:12px}
 .chip{display:inline-block;margin-top:14px;border-radius:999px;padding:6px 12px;font-family:'Barlow Condensed';font-size:15px;font-weight:800;letter-spacing:1px}
 .crit{background:rgba(224,82,82,.16);color:#ff8080;border:1px solid rgba(224,82,82,.35)} .high{background:rgba(224,150,82,.16);color:#f0b060;border:1px solid rgba(224,150,82,.35)} .ok{background:rgba(46,139,87,.18);color:#65d994;border:1px solid rgba(46,139,87,.35)}
@@ -60,12 +61,15 @@ ul{list-style:none;display:grid;gap:14px} li{font-size:21px;line-height:1.28;col
 .level strong{font-family:'Barlow Condensed';font-size:29px;letter-spacing:2px} .level span{font-size:18px;color:rgba(255,255,255,.86)}
 .l1{width:100%;background:#8d2430}.l2{width:90%;background:#b25d28}.l3{width:80%;background:#a98531}.l4{width:70%;background:#245f93}.l5{width:60%;background:#217044}
 .process{grid-template-columns:repeat(3,1fr);align-items:stretch} .process h3{color:var(--gold-light)}
-.table{width:100%;border-collapse:collapse;font-size:17px;background:rgba(13,31,53,.55);border:1px solid var(--border);border-radius:8px;overflow:hidden} .table th{font-family:'Barlow Condensed';font-size:17px;color:var(--gold-light);letter-spacing:1px;text-align:left;background:rgba(27,54,93,.85);padding:15px} .table td{padding:14px 15px;border-top:1px solid var(--border);color:var(--off-white)}
+.table{width:100%;border-collapse:collapse;font-size:17px;background:rgba(10,14,20,0.55);border:1px solid var(--border);border-radius:8px;overflow:hidden} .table th{font-family:'Barlow Condensed';font-size:17px;color:var(--gold-light);letter-spacing:1px;text-align:left;background:rgba(10,14,20,0.85);padding:15px} .table td{padding:14px 15px;border-top:1px solid var(--border);color:var(--off-white)}
 .timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin:34px 0 26px;position:relative} .timeline:before{content:'';position:absolute;left:8%;right:8%;top:34px;height:3px;background:linear-gradient(90deg,var(--green),var(--gold),var(--red))} .timepoint{position:relative;text-align:center;padding-top:64px} .timepoint:before{content:'';position:absolute;top:22px;left:50%;transform:translateX(-50%);width:26px;height:26px;border-radius:50%;background:var(--navy-dark);border:4px solid var(--gold);z-index:1} .timepoint strong{display:block;font-family:'Barlow Condensed';font-size:24px;color:var(--white)} .timepoint span{font-size:16px;color:var(--muted)}
-.linkbox{font-family:'Barlow Condensed';font-size:34px;color:var(--gold-light);border:2px solid rgba(201,169,97,.45);background:rgba(201,169,97,.10);border-radius:8px;padding:24px;text-align:center;letter-spacing:1px;margin-top:28px}
+.linkbox{font-family:'Barlow Condensed';font-size:34px;color:var(--gold-light);border:2px solid rgba(201,169,97,.45);background:rgba(201,169,97,.10);border-radius:8px;padding:24px;text-align:center;letter-spacing:1px;margin-top:28px;transition:background 0.3s, border-color 0.3s, transform 0.3s;cursor:pointer}
+.linkbox:hover{background:rgba(201,169,97,0.20);border-color:var(--gold);transform:scale(1.02)}
 #progress{position:fixed;top:0;left:0;height:4px;background:linear-gradient(90deg,var(--green),var(--gold));z-index:40;transition:width .25s ease}
 #nav{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);display:flex;align-items:center;gap:16px;z-index:50;background:rgba(8,15,26,.72);border:1px solid rgba(201,169,97,.26);border-radius:999px;padding:10px 18px;backdrop-filter:blur(10px);transition:opacity .25s ease} body.hide-nav #nav{opacity:0;pointer-events:none}
-.navbtn{font-family:'Barlow Condensed';font-size:20px;font-weight:800;color:var(--gold-light);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:999px;width:42px;height:34px;cursor:pointer} #counter{font-family:'Barlow Condensed';font-size:16px;color:var(--muted);letter-spacing:1px;min-width:108px;text-align:center}
+.navbtn{font-family:'Barlow Condensed';font-size:20px;font-weight:800;color:var(--gold-light);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:999px;width:42px;height:34px;cursor:pointer;transition:background 0.2s, transform 0.2s}
+.navbtn:hover{background:rgba(255,255,255,0.12);transform:scale(1.05)}
+#counter{font-family:'Barlow Condensed';font-size:16px;color:var(--muted);letter-spacing:1px;min-width:108px;text-align:center}
 #timer{position:fixed;right:34px;top:26px;z-index:55;font-family:'Barlow Condensed';font-size:24px;font-weight:800;color:var(--gold-light);background:rgba(8,15,26,.72);border:1px solid rgba(201,169,97,.25);border-radius:8px;padding:8px 14px;display:none} #timer.show{display:block}
 #notes{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(8,15,26,.92);border-top:1px solid rgba(201,169,97,.35);padding:18px 34px;transform:translateY(100%);transition:transform .3s ease;color:var(--white);font-size:14px;line-height:1.45} #notes.show{transform:translateY(0)} #notes strong{font-family:'Barlow Condensed';color:var(--gold-light);font-size:16px;letter-spacing:1px}
 .overlay{position:fixed;inset:0;z-index:80;background:rgba(8,15,26,.96);display:none;padding:52px;overflow:hidden} .overlay.show{display:block}
@@ -79,26 +83,817 @@ ul{list-style:none;display:grid;gap:14px} li{font-size:21px;line-height:1.28;col
 <body>
 <div id="progress"></div><div id="timer">00:00</div>
 <div class="deck" id="deck">
-<section class="slide active center" data-note="Dar bienvenida. Confirmar que ambos participantes tienen audio y video activo. Recordar que habrá una actividad práctica de 30 min al final."><div class="bg-dots"></div><div class="orb green"></div><div class="orb gold"></div><img class="logo" data-logo alt="Vértice EHS"><div style="height:34px"></div><div class="badge">NOM-009-STPS-2011</div><div style="height:24px"></div><h1>Trabajos en Altura</h1><div class="rule" style="margin-left:auto;margin-right:auto"></div><p>Condiciones de Seguridad para Realizar Trabajos en Altura</p><div class="meta"><div>Virtual - Google Meet</div><div>Duración: 3-4 hrs</div><div>2 Participantes</div></div><p style="font-family:'Barlow Condensed';font-weight:700;letter-spacing:3px;margin-top:34px;color:var(--muted)">2025 - 2026</p><div class="decor">01</div></section>
-<section class="slide" data-note="Destacar el punto 4: la actividad práctica de la sesión está diseñada exactamente para este objetivo. Al final de la sesión, habrán producido un AR real."><img class="logo small" data-logo alt="Vértice EHS"><div class="content two"><div><div class="kicker">Encuadre del curso</div><h2>Objetivo de Aprendizaje</h2><div class="rule"></div><div class="note-gold">Al término del curso, el participante será capaz de:</div></div><ul class="check"><li>Identificar peligros específicos de trabajos en altura conforme a NOM-009-STPS-2011</li><li>Aplicar la jerarquía de controles para mitigar riesgos de caída libre</li><li>Describir los cuatro sistemas del SPPC y sus condiciones de aplicación</li><li>Elaborar un Análisis de Riesgo con controles documentados</li><li>Citar las obligaciones del patrón y trabajador establecidas en los Numerales 5 y 6</li></ul></div><div class="decor">02</div></section>
-<section class="slide" data-note="Enfatizar: NOM-009 no es opcional. Ante una visita de la STPS, la ausencia de PTS y ARs firmados es infracción inmediata."><div class="bg-dots"></div><img class="logo small" data-logo alt="Vértice EHS"><div class="content"><div class="kicker">Base legal</div><h2>Marco Normativo</h2><div class="rule"></div><div class="grid g2"><div class="card gold"><h3>NOM-009-STPS-2011</h3><p>Condiciones de seguridad para realizar trabajos en altura. DOF: 6 mayo 2011. Vigencia: 4 noviembre 2011.</p></div><div class="card green"><h3>Reglamento Federal de SST</h3><p>Actividades de alto riesgo: exige procedimientos, capacitación, supervisión y EPP adecuado.</p></div><div class="card blue"><h3>Ley Federal del Trabajo</h3><p>Art. 132: proporcionar condiciones seguras y EPP. Art. 134: cumplir normas de seguridad.</p></div><div class="card red"><h3>Sanciones</h3><p>Incumplir una NOM puede implicar multas, suspensión de actividades y responsabilidades por accidente grave o mortal.</p></div></div></div><div class="decor">03</div></section>
-<section class="slide center" data-note="Preguntar: ¿A qué altura trabajan normalmente en sus instalaciones? Conectar con su realidad."><div class="orb gold"></div><img class="logo small" data-logo alt="Vértice EHS"><div class="content center"><div class="kicker">Numeral 3 - Definición</div><h2 style="font-size:52px">¿Qué es un Trabajo en Altura?</h2><div class="rule"></div><div class="big-quote">“Las actividades de mantenimiento, instalación, demolición, operación, reparación, limpieza, entre otras, que se realizan a alturas mayores de <span class="highlight">1.80 m</span> sobre el nivel de referencia.”</div><div class="diagram" style="width:760px;margin-top:26px"><svg viewBox="0 0 760 210" role="img"><line x1="70" y1="160" x2="690" y2="160" stroke="#8fa3bc" stroke-width="2"/><line x1="160" y1="40" x2="160" y2="160" stroke="#C9A961" stroke-width="4"/><text x="132" y="34" fill="#C9A961" font-family="Barlow Condensed" font-size="26" font-weight="800">1.8 m</text><circle cx="365" cy="72" r="22" fill="none" stroke="#f0f4f8" stroke-width="4"/><path d="M365 94v58M330 116h70M345 152l-25 45M385 152l25 45" fill="none" stroke="#f0f4f8" stroke-width="7" stroke-linecap="round"/><path d="M160 40h470" stroke="#e05252" stroke-width="3" stroke-dasharray="10 10"/><text x="438" y="88" fill="#e05252" font-family="Barlow Condensed" font-size="22" font-weight="800">LÍNEA DE RIESGO</text></svg></div><p style="color:var(--gold-light);font-size:19px">No existe altura “segura” sin protección: una caída desde 1.8 m puede causar lesión grave o muerte.</p></div><div class="decor">04</div></section>
-<section class="slide" data-note="Usar criterio conservador: cuando existe duda razonable, se aplica NOM-009 y se documenta el control."><img class="logo small" data-logo alt="Vértice EHS"><div class="content"><div class="kicker">Alcance</div><h2>¿Cuándo Aplica?</h2><div class="rule"></div><div class="apply"><div class="card yes"><div class="head">Aplica la NOM-009</div><ul class="check"><li>Techos, azoteas y cubiertas a 1.8 m o más</li><li>Escaleras de extensión y de tijera</li><li>Andamios fijos, rodantes o suspendidos</li><li>Plataformas elevadoras y canastillas</li><li>Pozos, silos y cisternas con riesgo de caída</li><li>Fachadas o estructuras verticales</li></ul></div><div class="card no"><div class="head">No aplica / excepción</div><ul><li>Barandal permanente mínimo de 90 cm con rodapié</li><li>Estructura o malla que impide físicamente la caída libre</li><li>Superficie horizontal sin bordes expuestos ni aberturas</li></ul><div class="note-gold" style="margin-top:28px">Cuando hay duda: SE APLICA. El criterio conservador protege al trabajador y al patrón.</div></div></div></div><div class="decor">05</div></section>
-<section class="slide" data-note="Los peligros 1, 2 y 6 suelen concentrar las consecuencias más severas. Pedir ejemplos reales a los participantes."><img class="logo small" data-logo alt="Vértice EHS"><div class="content"><div class="kicker">Identificación de peligros</div><h2>Peligros y Riesgos Típicos</h2><div class="rule"></div><div class="grid g3"><div class="card red"><span class="icon">🧗</span><h3>Caída libre</h3><p>Severidad: severa. Frecuencia: alta.</p><span class="chip crit">P×S = 9 - Crítico</span></div><div class="card red"><span class="icon">🔧</span><h3>Caída de objetos</h3><p>Material o herramienta sobre personal inferior.</p><span class="chip crit">P×S = 6 - Alto</span></div><div class="card amber"><span class="icon">⚡</span><h3>Contacto eléctrico</h3><p>Herramientas y luminarias energizadas.</p><span class="chip high">P×S = 6 - Alto</span></div><div class="card amber"><span class="icon">🌡️</span><h3>Estrés térmico</h3><p>Trabajo bajo lámina y calor acumulado.</p><span class="chip high">P×S = 6 - Alto</span></div><div class="card green"><span class="icon">💪</span><h3>Sobreesfuerzo</h3><p>Postura forzada y manejo de cargas.</p><span class="chip ok">P×S = 4 - Moderado</span></div><div class="card red"><span class="icon">🦺</span><h3>Falla de EPP</h3><p>Arnés dañado, mal ajustado o incompatible.</p><span class="chip crit">P×S = 9 - Crítico</span></div></div></div><div class="decor">06</div></section>
-<section class="slide" data-note="El error más común es implementar solo EPP. La norma exige analizar controles de mayor eficacia antes de depender del arnés."><img class="logo small" data-logo alt="Vértice EHS"><div class="content"><div class="kicker">Control del riesgo</div><h2>Jerarquía de Controles</h2><div class="rule"></div><div class="pyramid"><div class="level l1"><strong>Eliminación</strong><span>¿Puede hacerse sin subir? Rediseñar la tarea.</span></div><div class="level l2"><strong>Sustitución</strong><span>Plataforma elevadora, extensión telescópica, drones de inspección.</span></div><div class="level l3"><strong>Ingeniería</strong><span>Barandal certificado, red, línea de vida fija, plataforma de trabajo.</span></div><div class="level l4"><strong>Administrativo</strong><span>PTS, permiso, capacitación, señalización, delimitación y supervisión.</span></div><div class="level l5"><strong>EPP</strong><span>Última barrera: arnés, línea de vida, casco y conectores.</span></div></div></div><div class="decor">07</div></section>
-<section class="slide" data-note="Pregunta clave: ¿Cuál sistema usar depende de qué? Depende del espacio libre inferior, del borde y de la tarea."><img class="logo small" data-logo alt="Vértice EHS"><div class="content"><div class="kicker">Sistemas personales</div><h2>Los 4 Sistemas SPPC</h2><div class="rule"></div><div class="grid g2"><div class="card green"><h3>01 - Restricción</h3><p>Impide alcanzar el borde. No detiene una caída iniciada.</p></div><div class="card gold"><h3>02 - Posicionamiento</h3><p>Mantiene al trabajador estable con manos libres. Requiere respaldo contra caída.</p></div><div class="card red"><h3>03 - Detención de caída</h3><p>Arnés + absorbedor. Controla distancia total y requiere espacio libre inferior.</p></div><div class="card blue"><h3>04 - Salvamento y rescate</h3><p>Recuperación del trabajador suspendido. Debe estar definido antes de iniciar.</p></div></div></div><div class="decor">08</div></section>
-<section class="slide" data-note="Mostrar físicamente o en cámara un arnés si se tiene disponible. Recalcar argolla dorsal entre omóplatos."><img class="logo small" data-logo alt="Vértice EHS"><div class="content two"><div><div class="kicker">Numeral 8 - EPP</div><h2>EPP Obligatorio</h2><div class="rule"></div><ul class="check"><li><b>Arnés de cuerpo completo:</b> inspección antes de cada uso y retiro tras impacto.</li><li><b>Línea de vida con absorbedor:</b> doble gancho con seguro y compatibilidad.</li><li><b>Casco Tipo II con barboquejo:</b> dieléctrico si hay exposición eléctrica.</li><li><b>Calzado de seguridad:</b> suela antiderrapante y condición dieléctrica si aplica.</li><li><b>Guantes y lentes:</b> adecuados a herramienta y material.</li></ul><div class="warning" style="margin-top:18px"><p style="color:#ffaaaa;font-weight:600">Un arnés mal colocado es tan peligroso como no usar ninguno.</p></div></div><div class="harness"><svg viewBox="0 0 640 640" role="img"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#C9A961"/></marker></defs><circle cx="310" cy="92" r="48" fill="none" stroke="#f0f4f8" stroke-width="8"/><path d="M310 142v190M226 188l84 54 88-54M246 258h128M270 332l-42 160M350 332l48 160M226 492h92M365 492h82" fill="none" stroke="#f0f4f8" stroke-width="14" stroke-linecap="round"/><path d="M310 158l-58 176M310 158l70 176M252 334h128M270 334l44 150M380 334l-46 150" fill="none" stroke="#2E8B57" stroke-width="9" stroke-linecap="round"/><circle cx="310" cy="155" r="13" fill="#C9A961"/><path d="M310 142C360 80 415 50 500 48" fill="none" stroke="#C9A961" stroke-width="6" stroke-dasharray="10 9"/><text x="392" y="55" fill="#C9A961" font-family="Barlow Condensed" font-size="24" font-weight="800">Línea de vida con absorbedor</text><line x1="396" y1="132" x2="325" y2="154" stroke="#C9A961" stroke-width="3" marker-end="url(#arrow)"/><text x="402" y="128" fill="#f0f4f8" font-family="Barlow" font-size="18">Argolla dorsal</text><line x1="120" y1="274" x2="250" y2="258" stroke="#C9A961" stroke-width="3" marker-end="url(#arrow)"/><text x="34" y="278" fill="#f0f4f8" font-family="Barlow" font-size="18">Hebillas ajustables</text><line x1="470" y1="408" x2="362" y2="400" stroke="#C9A961" stroke-width="3" marker-end="url(#arrow)"/><text x="474" y="414" fill="#f0f4f8" font-family="Barlow" font-size="18">Correas de pierna</text></svg></div></div><div class="decor">09</div></section>
-<section class="slide" data-note="Conectar con el PDF del procedimiento: revisión médica, permiso, análisis previo, EPP, delimitación, bloqueo, riesgo eléctrico y plan de emergencia."><img class="logo small" data-logo alt="Vértice EHS"><div class="content"><div class="kicker">Numeral 9 - Condiciones de seguridad</div><h2>Plan de Trabajo Seguro</h2><div class="rule"></div><div class="grid process"><div class="card green"><h3>Antes</h3><ul><li>Elaborar AR y PTS.</li><li>Firmar autorización y permiso.</li><li>Verificar anclajes, EPP y condición médica.</li><li>Activar plan de rescate.</li></ul></div><div class="card gold"><h3>Durante</h3><ul><li>Supervisión activa.</li><li>Nunca trabajar solo.</li><li>No improvisar anclajes.</li><li>Delimitar área inferior.</li><li>Suspender ante condición insegura.</li></ul></div><div class="card blue"><h3>Después</h3><ul><li>Cerrar PTS firmado.</li><li>Reportar near miss.</li><li>Limpiar e inspeccionar EPP.</li><li>Archivar evidencia para STPS.</li></ul></div></div></div><div class="decor">10</div></section>
-<section class="slide" data-note="Pedir a los participantes identificar cuáles documentos existen hoy en su operación y cuáles faltan."><img class="logo small" data-logo alt="Vértice EHS"><div class="content"><div class="kicker">Numeral 5 - NOM-009-STPS-2011</div><h2>Obligaciones del Patrón</h2><div class="rule"></div><div class="grid g4"><div class="card gold"><h3>01</h3><p>Elaborar Análisis de Riesgo por tipo de trabajo.</p></div><div class="card green"><h3>02</h3><p>Contar con procedimientos de trabajo seguro actualizados.</p></div><div class="card blue"><h3>03</h3><p>Proporcionar EPP certificado sin costo al trabajador.</p></div><div class="card red"><h3>04</h3><p>Capacitar antes del primer trabajo y conservar DC-3.</p></div><div class="card gold"><h3>05</h3><p>Verificar resistencia de anclajes y compatibilidad del sistema.</p></div><div class="card green"><h3>06</h3><p>Establecer plan de rescate con personal y equipo.</p></div><div class="card blue"><h3>07</h3><p>Implementar permisos antes de cada actividad.</p></div><div class="card red"><h3>08</h3><p>Mantener registros: AR, PTS, permisos, capacitaciones e inspecciones.</p></div></div></div><div class="decor">11</div></section>
-<section class="slide" data-note="Reforzar que el trabajador no solo usa EPP: también reporta, detiene y activa emergencias."><img class="logo small" data-logo alt="Vértice EHS"><div class="content"><div class="kicker">Numeral 6 - NOM-009-STPS-2011</div><h2>Obligaciones del Trabajador</h2><div class="rule"></div><div class="grid g3"><div class="card green"><span class="icon">📚</span><h3>Capacitación</h3><p>Participar y acreditar la formación requerida.</p></div><div class="card gold"><span class="icon">🦺</span><h3>Uso correcto</h3><p>Arnés ajustado, inspección previa y sin modificaciones.</p></div><div class="card blue"><span class="icon">📋</span><h3>Seguir PTS</h3><p>Sin excepciones, atajos ni improvisaciones.</p></div><div class="card red"><span class="icon">⚠️</span><h3>Reportar</h3><p>Superficies dañadas, equipos fallados o anclajes dudosos.</p></div><div class="card gold"><span class="icon">🚫</span><h3>Detener</h3><p>Negarse ante condiciones inseguras sin represalia.</p></div><div class="card green"><span class="icon">🔔</span><h3>Activar rescate</h3><p>Nunca improvisar un rescate sin procedimiento.</p></div></div></div><div class="decor">12</div></section>
-<section class="slide" data-note="Este es el momento de impacto: insistir en que el plan de rescate no es un anexo, es una condición de inicio."><div class="orb gold"></div><img class="logo small" data-logo alt="Vértice EHS"><div class="content"><div class="kicker" style="color:#ff8c8c">Punto crítico - Rescate en altura</div><h2>Síndrome de Arnés</h2><div class="rule"></div><div class="warning"><h3 style="font-family:'Barlow Condensed';font-size:38px;color:#ffaaaa;margin-bottom:8px">SÍNDROME DE SUSPENSIÓN EN ARNÉS</h3><p style="font-size:28px;color:var(--white);font-weight:500">Un trabajador suspendido inmóvil puede morir en 5 a 30 minutos sin rescate.</p><p style="margin-top:12px">Las correas comprimen vasos femorales, la sangre se acumula en piernas, el retorno venoso se bloquea y puede ocurrir colapso repentino.</p></div><div class="timeline"><div class="timepoint"><strong>0 min</strong><span>Suspendido</span></div><div class="timepoint"><strong>5 min</strong><span>Mareo, palidez</span></div><div class="timepoint"><strong>15 min</strong><span>Objetivo de rescate</span></div><div class="timepoint"><strong>30 min</strong><span>Alto riesgo</span></div><div class="timepoint"><strong>30+ min</strong><span>Daño grave</span></div></div><ul class="check" style="grid-template-columns:repeat(4,1fr);gap:18px"><li>Activar rescate inmediatamente</li><li>No bajar bruscamente</li><li>Posición semisentado</li><li>Valoración médica siempre</li></ul></div><div class="decor">13</div></section>
-<section class="slide" data-note="No se encontraron estadísticas exactas confiables en los PDFs locales; se presenta el dato como criterio de prevención y patrones de accidente frecuentes."><img class="logo small" data-logo alt="Vértice EHS"><div class="content"><div class="kicker">Contexto: por qué importa</div><h2>Casos Reales y Estadísticas</h2><div class="rule"></div><div class="two"><div><div style="font-family:'Barlow Condensed';font-size:118px;font-weight:800;color:var(--gold);line-height:.8">95%</div><p style="font-size:28px;color:var(--off-white);margin-top:16px">de los accidentes por trabajo en altura son prevenibles cuando existe análisis de riesgo, PTS, supervisión y EPP inspeccionado.</p><p style="font-size:16px;margin-top:18px">Dato usado como criterio preventivo de capacitación; no sustituye estadísticas oficiales de la empresa o autoridad.</p></div><div class="grid"><div class="card red"><h3>1. Volcadura de escalera</h3><p>Sin sujeción, ángulo incorrecto o base inestable.</p></div><div class="card amber"><h3>2. Rotura de superficie</h3><p>Láminas, cubiertas y techos sin refuerzo.</p></div><div class="card gold"><h3>3. Falla del EPP</h3><p>Falta de inspección, incompatibilidad o anclaje improvisado.</p></div></div></div></div><div class="decor">14</div></section>
-<section class="slide" data-note="Estos documentos son los que revisará un inspector. Si no están, no hay evidencia de cumplimiento."><img class="logo small" data-logo alt="Vértice EHS"><div class="content"><div class="kicker">Cumplimiento normativo documental</div><h2>Documentos Obligatorios</h2><div class="rule"></div><table class="table"><thead><tr><th>Documento</th><th>Numeral</th><th>Frecuencia</th><th>Responsable</th></tr></thead><tbody><tr><td>Análisis de Riesgo (AR)</td><td>9.1</td><td>Por tipo de trabajo</td><td>Patrón / Consultor</td></tr><tr><td>Plan de Trabajo Seguro (PTS)</td><td>9.2</td><td>Antes de cada trabajo</td><td>Responsable del trabajo</td></tr><tr><td>Permiso de Trabajo en Altura</td><td>9.3</td><td>Antes de cada trabajo</td><td>Patrón o representante</td></tr><tr><td>Plan de Rescate</td><td>9.8</td><td>Antes de cada trabajo</td><td>Patrón</td></tr><tr><td>DC-3 capacitación</td><td>5.9</td><td>Por trabajador capacitado</td><td>Patrón + instructor</td></tr><tr><td>Inspección de EPP</td><td>8.6</td><td>Antes de uso y periódica</td><td>Responsable SST</td></tr><tr><td>Mantenimiento de anclajes</td><td>8.4</td><td>Programado o tras evento</td><td>Responsable SST</td></tr></tbody></table><div class="note-gold" style="margin-top:22px">Sin documentos = sin cumplimiento. Sin cumplimiento = riesgo legal + humano.</div></div><div class="decor">15</div></section>
-<section class="slide" data-note="Hacer lectura rápida y pedir a cada participante elegir el punto que más aplica a su operación actual."><img class="logo small" data-logo alt="Vértice EHS"><div class="content"><div class="kicker">Lo que deben llevarse hoy</div><h2>Resumen y Puntos Clave</h2><div class="rule"></div><div class="grid g2"><div class="card gold"><h3>🎯 1.8 m</h3><p>Todo trabajo con riesgo de caída libre activa la NOM-009.</p></div><div class="card green"><h3>📝 PTS</h3><p>Ningún trabajo inicia sin PTS firmado y rescate activo.</p></div><div class="card blue"><h3>🏗️ Jerarquía</h3><p>Los controles van de eliminación a EPP, no al revés.</p></div><div class="card red"><h3>⏱️ 15 min</h3><p>Tiempo objetivo de rescate activo para suspensión en arnés.</p></div><div class="card gold"><h3>🦺 Inspección</h3><p>Arnés sin inspección previa es un arnés que puede fallar.</p></div><div class="card green"><h3>📂 Evidencia</h3><p>Sin documentos no hay cumplimiento defendible.</p></div></div></div><div class="decor">16</div></section>
-<section class="slide" data-note="Dar 30 minutos. Uno de los participantes lee escenario y el otro valida peligros. Ambos deben consensuar controles."><img class="logo small" data-logo alt="Vértice EHS"><div class="content"><div class="kicker">Actividad práctica - 30 minutos</div><h2>Análisis de Riesgo</h2><div class="rule"></div><div class="two"><div class="card gold"><h3>Instrucciones</h3><ul class="check"><li>Ingresen al enlace de la app interactiva.</li><li>Lean el escenario de ductos a 4.5 m.</li><li>Identifiquen peligros, evalúen P×S y propongan controles.</li><li>Copien el código generado y envíenlo por chat de Meet.</li></ul><p style="margin-top:18px;color:var(--gold-light)">Trabajen en equipo en el mismo dispositivo. Ambos deben estar de acuerdo en cada decisión.</p></div><div><div style="font-family:'Barlow Condensed';font-size:88px;color:var(--gold);font-weight:800;line-height:.9">⏱ 30</div><p style="font-size:30px;color:var(--off-white);margin-top:8px">minutos</p><div class="linkbox">[INSERTAR URL DE VERCEL AQUÍ]</div></div></div></div><div class="decor">17</div></section>
-<section class="slide center" data-note="Cerrar con preguntas, recordar envío de código de actividad y compartir próximos pasos para constancia/evidencia."><div class="bg-dots"></div><div class="orb green"></div><div class="orb gold"></div><img class="logo" data-logo alt="Vértice EHS"><div style="height:36px"></div><h1 style="font-size:76px">¡Gracias por su participación!</h1><div class="rule" style="margin-left:auto;margin-right:auto"></div><p style="font-style:italic;color:var(--off-white)">“La seguridad no es un gasto - es la única inversión que siempre da rendimientos.”</p><div class="meta"><div>+52 222 459 6850</div><div>ozwaldo379@gmail.com</div><div>NOM-009-STPS-2011</div></div><div class="badge" style="margin-top:32px">Vértice EHS · 2025-2026</div><div class="decor">18</div></section>
+<section class="slide active center" data-note="Dar bienvenida. Confirmar audio y video activos. Indicar que habrá actividades prácticas y examen final.">
+  <div class="bg-dots"></div><div class="orb green"></div><div class="orb gold"></div>
+  <img class="logo" data-logo alt="Vértice EHS">
+  <div style="height:34px"></div>
+  <div class="badge">NOM-009-STPS-2011</div>
+  <div style="height:24px"></div>
+  <h1>Trabajos en Altura</h1>
+  <div class="rule" style="margin-left:auto;margin-right:auto"></div>
+  <p>Condiciones de Seguridad para Realizar Trabajos en Altura</p>
+  <div class="meta">
+    <div>Virtual - Google Meet</div>
+    <div>Apertura (0:00 - 0:05)</div>
+    <div>Duración total: 4 hrs</div>
+  </div>
+  <p style="font-family:'Barlow Condensed';font-weight:700;letter-spacing:3px;margin-top:34px;color:var(--muted)">VÉRTICE EHS · 2026</p>
+  <div class="decor">01</div>
+</section>
+
+<section class="slide center" data-note="Compartir el enlace de Kahoot.it en el chat de Meet. Pedir a todos ingresar y colocar el PIN proyectado en pantalla.">
+  <div class="bg-dots"></div><div class="orb gold"></div>
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content center">
+    <div class="kicker">Evaluación Inicial</div>
+    <h2>🕹️ Kahoot de Diagnóstico</h2>
+    <div class="rule"></div>
+    <div class="big-quote">
+      Ingresa a <span class="highlight">kahoot.it</span> desde tu celular o computadora y coloca el PIN en pantalla.
+    </div>
+    <div style="height:30px"></div>
+    <div class="meta">
+      <div>Actividad: Diagnóstico</div>
+      <div style="color:var(--amber)">⏱️ Tiempo: 10 min (0:05 - 0:15)</div>
+      <div>10 Preguntas</div>
+    </div>
+    <div class="linkbox" style="margin-top:40px; max-width:600px;">
+      <a href="https://kahoot.it" target="_blank" style="color:var(--gold-light); text-decoration:none;">Ir a Kahoot.it ↗</a>
+    </div>
+  </div>
+  <div class="decor">02</div>
+</section>
+
+<section class="slide" data-note="Revisar el programa del día y los objetivos de aprendizaje. Explicar el cronograma minuto a minuto.">
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content two">
+    <div>
+      <div class="kicker">Encuadre del curso</div>
+      <h2>Objetivo de Aprendizaje</h2>
+      <div class="rule"></div>
+      <div class="note-gold">Al término del curso, el participante será capaz de:</div>
+      <div style="height:20px"></div>
+      <div class="meta" style="margin-top:10px; justify-content:flex-start;">
+        <div>Bloque: Encuadre</div>
+        <div style="color:var(--amber)">⏱️ Duración: 8 min (0:20 - 0:28)</div>
+      </div>
+    </div>
+    <ul class="check">
+      <li>Identificar peligros específicos de trabajos en altura conforme a NOM-009-STPS-2011</li>
+      <li>Aplicar la jerarquía de controles para mitigar riesgos de caída libre</li>
+      <li>Describir los cuatro sistemas del SPPC y sus condiciones de aplicación</li>
+      <li>Elaborar un Análisis de Riesgo con controles documentados</li>
+      <li>Citar las obligaciones del patrón y trabajador establecidas en los Numerales 5 y 6</li>
+    </ul>
+  </div>
+  <div class="decor">03</div>
+</section>
+
+<section class="slide" data-note="Enfatizar: NOM-009 no es opcional. Ante una visita de la STPS, la ausencia de PTS y ARs firmados es infracción inmediata.">
+  <div class="bg-dots"></div>
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content">
+    <div class="kicker">Base legal - Módulo A1</div>
+    <h2>Marco Normativo</h2>
+    <div class="rule"></div>
+    <div class="grid g2">
+      <div class="card gold">
+        <h3>NOM-009-STPS-2011</h3>
+        <p>Condiciones de seguridad para realizar trabajos en altura. DOF: 6 mayo 2011. Vigencia: 4 noviembre 2011.</p>
+      </div>
+      <div class="card green">
+        <h3>Reglamento Federal de SST</h3>
+        <p>Actividades de alto riesgo: exige procedimientos, capacitación, supervisión y EPP adecuado.</p>
+      </div>
+      <div class="card blue">
+        <h3>Ley Federal del Trabajo</h3>
+        <p>Art. 132: proporcionar condiciones seguras y EPP. Art. 134: cumplir normas de seguridad.</p>
+      </div>
+      <div class="card red">
+        <h3>Sanciones</h3>
+        <p>Incumplir una NOM puede implicar multas, suspensión de actividades y responsabilidades por accidente grave o mortal.</p>
+      </div>
+    </div>
+    <div style="height:12px"></div>
+    <div class="note-gold" style="font-size:16px; padding:10px 18px;">
+      <b>Matriz de Cumplimiento:</b> La NOM-009-STPS-2011 consta de <b>103 indicadores técnicos/administrativos</b>. De ellos, <b>60 son medidas físicas tangibles (58% del éxito)</b> y la autorización de trabajo es 1 de los 82 indicadores globales de control en SST.
+    </div>
+    <div class="meta" style="margin-top:12px; justify-content:flex-start;">
+      <div>Módulo A1: Normativa</div>
+      <div style="color:var(--amber)">⏱️ Tiempo: 10 min (0:30 - 0:40)</div>
+    </div>
+  </div>
+  <div class="decor">04</div>
+</section>
+
+<section class="slide center" data-note="Preguntar a la audiencia sobre su altura de trabajo típica. Definición exacta según Numeral 3.">
+  <div class="orb gold"></div>
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content center">
+    <div class="kicker">Numeral 3 - Definición</div>
+    <h2 style="font-size:52px">¿Qué es un Trabajo en Altura?</h2>
+    <div class="rule"></div>
+    <div class="big-quote">
+      “Las actividades de mantenimiento, instalación, demolición, operación, reparación, limpieza, entre otras, que se realizan a alturas mayores de <span class="highlight">1.80 m</span> sobre el nivel de referencia.”
+    </div>
+    <div class="diagram" style="width:760px;margin-top:26px">
+      <svg viewBox="0 0 760 210" role="img">
+        <line x1="70" y1="160" x2="690" y2="160" stroke="#8fa3bc" stroke-width="2"/>
+        <line x1="160" y1="40" x2="160" y2="160" stroke="#C9A961" stroke-width="4"/>
+        <text x="132" y="34" fill="#C9A961" font-family="Barlow Condensed" font-size="26" font-weight="800">1.8 m</text>
+        <circle cx="365" cy="72" r="22" fill="none" stroke="#f0f4f8" stroke-width="4"/>
+        <path d="M365 94v58M330 116h70M345 152l-25 45M385 152l25 45" fill="none" stroke="#f0f4f8" stroke-width="7" stroke-linecap="round"/>
+        <path d="M160 40h470" stroke="#e05252" stroke-width="3" stroke-dasharray="10 10"/>
+        <text x="438" y="88" fill="#e05252" font-family="Barlow Condensed" font-size="22" font-weight="800">LÍNEA DE RIESGO</text>
+      </svg>
+    </div>
+    <p style="color:var(--gold-light);font-size:19px">No existe altura “segura” sin protección: una caída desde 1.8 m puede causar lesión grave o muerte.</p>
+  </div>
+  <div class="decor">05</div>
+</section>
+
+<section class="slide" data-note="Usar criterio conservador: cuando existe duda razonable, se aplica NOM-009 y se documenta el control.">
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content">
+    <div class="kicker">Alcance</div>
+    <h2>¿Cuándo Aplica?</h2>
+    <div class="rule"></div>
+    <div class="apply">
+      <div class="card yes">
+        <div class="head">Aplica la NOM-009</div>
+        <ul class="check">
+          <li>Techos, azoteas y cubiertas a 1.8 m o más</li>
+          <li>Escaleras de extensión y de tijera</li>
+          <li>Andamios fijos, rodantes o suspendidos</li>
+          <li>Plataformas elevadoras y canastillas</li>
+          <li>Pozos, silos y cisternas con riesgo de caída</li>
+          <li>Fachadas o estructuras verticales</li>
+        </ul>
+      </div>
+      <div class="card no">
+        <div class="head">No aplica / excepción</div>
+        <ul>
+          <li>Barandal permanente mínimo de 90 cm con rodapié</li>
+          <li>Estructura o malla que impide físicamente la caída libre</li>
+          <li>Superficie horizontal sin bordes expuestos ni aberturas</li>
+        </ul>
+        <div class="note-gold" style="margin-top:28px">Cuando hay duda: SE APLICA. El criterio conservador protege al trabajador y al patrón.</div>
+      </div>
+    </div>
+  </div>
+  <div class="decor">06</div>
+</section>
+
+<section class="slide" data-note="Pedir a los participantes identificar cuáles documentos existen hoy en su operación y cuáles faltan.">
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content">
+    <div class="kicker">Numeral 5 - NOM-009-STPS-2011</div>
+    <h2>Obligaciones del Patrón</h2>
+    <div class="rule"></div>
+    <div class="grid g4">
+      <div class="card gold"><h3>01</h3><p>Elaborar Análisis de Riesgo por tipo de trabajo.</p></div>
+      <div class="card green"><h3>02</h3><p>Contar con procedimientos de trabajo seguro actualizados.</p></div>
+      <div class="card blue"><h3>03</h3><p>Proporcionar EPP certificado sin costo al trabajador.</p></div>
+      <div class="card red"><h3>04</h3><p>Capacitar antes del primer trabajo y conservar DC-3.</p></div>
+      <div class="card gold"><h3>05</h3><p>Verificar resistencia de anclajes y compatibilidad del sistema.</p></div>
+      <div class="card green"><h3>06</h3><p>Establecer plan de rescate con personal y equipo.</p></div>
+      <div class="card blue"><h3>07</h3><p>Implementar permisos antes de cada actividad.</p></div>
+      <div class="card red"><h3>08</h3><p>Mantener registros: AR, PTS, permisos, capacitaciones e inspecciones.</p></div>
+    </div>
+    <div style="height:15px"></div>
+    <div class="meta" style="margin-top:15px; justify-content:flex-start;">
+      <div>Módulo A1: Obligaciones</div>
+      <div style="color:var(--amber)">⏱️ Tiempo: 8 min (0:40 - 0:48)</div>
+    </div>
+  </div>
+  <div class="decor">07</div>
+</section>
+
+<section class="slide" data-note="Reforzar que el trabajador no solo usa EPP: también reporta, detiene y activa emergencias.">
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content">
+    <div class="kicker">Numeral 6 - NOM-009-STPS-2011</div>
+    <h2>Obligaciones del Trabajador</h2>
+    <div class="rule"></div>
+    <div class="grid g3">
+      <div class="card green"><span class="icon">📚</span><h3>Capacitación</h3><p>Participar y acreditar la formación requerida.</p></div>
+      <div class="card gold"><span class="icon">🦺</span><h3>Uso correcto</h3><p>Arnés ajustado, inspección previa y sin modificaciones.</p></div>
+      <div class="card blue"><span class="icon">📋</span><h3>Seguir PTS</h3><p>Sin excepciones, atajos ni improvisaciones.</p></div>
+      <div class="card red"><span class="icon">⚠️</span><h3>Reportar</h3><p>Superficies dañadas, equipos fallados o anclajes dudosos.</p></div>
+      <div class="card gold"><span class="icon">🚫</span><h3>Detener</h3><p>Negarse ante condiciones inseguras sin represalia.</p></div>
+      <div class="card green"><span class="icon">🔔</span><h3>Activar rescate</h3><p>Nunca improvisar un rescate sin procedimiento.</p></div>
+    </div>
+    <div style="height:15px"></div>
+    <div class="meta" style="margin-top:15px; justify-content:flex-start;">
+      <div>Módulo A1: Obligaciones</div>
+      <div style="color:var(--amber)">⏱️ Tiempo: 7 min (0:48 - 0:55)</div>
+    </div>
+  </div>
+  <div class="decor">08</div>
+</section>
+
+<section class="slide center" data-note="Hacer clic en el enlace para abrir el Quiz Formativo A1. Son 5 preguntas de opción múltiple en paralelo.">
+  <div class="bg-dots"></div><div class="orb green"></div>
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content center">
+    <div class="kicker">Evaluación Formativa</div>
+    <h2>⚡ Quiz Formativo A1: Marco Normativo</h2>
+    <div class="rule"></div>
+    <p>Responde las 5 preguntas sobre las definiciones, umbrales y responsabilidades de la NOM-009.</p>
+    <div style="height:30px"></div>
+    <div class="meta">
+      <div>Actividad: Quiz A1</div>
+      <div style="color:var(--amber)">⏱️ Tiempo: 5 min (0:55 - 1:00)</div>
+      <div>5 Preguntas</div>
+    </div>
+    <div class="linkbox" style="margin-top:40px; max-width:600px;">
+      <a href="../../examenes/evaluaciones_formativas/quiz_alturas.html?module=A1" target="_blank" style="color:var(--gold-light); text-decoration:none;">Iniciar Quiz A1 ↗</a>
+    </div>
+  </div>
+  <div class="decor">09</div>
+</section>
+
+<section class="slide" data-note="Los peligros 1, 2 y 6 suelen concentrar las consecuencias más severas. Pedir ejemplos a los participantes.">
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content">
+    <div class="kicker">Identificación de peligros - Módulo A2</div>
+    <h2>Peligros y Riesgos Típicos</h2>
+    <div class="rule"></div>
+    <div class="grid g3">
+      <div class="card red"><span class="icon">🧗</span><h3>Caída libre</h3><p>Severidad: severa. Frecuencia: alta.</p><span class="chip crit">P×S = 9 - Crítico</span></div>
+      <div class="card red"><span class="icon">🔧</span><h3>Caída de objetos</h3><p>Material o herramienta sobre personal inferior.</p><span class="chip crit">P×S = 6 - Alto</span></div>
+      <div class="card amber"><span class="icon">⚡</span><h3>Contacto eléctrico</h3><p>Líneas de media tensión (Seguridad 7.9: 3.1m para ≤50kV; 3.75m para 115kV).</p><span class="chip high">P×S = 6 - Alto</span></div>
+      <div class="card amber"><span class="icon">🌡️</span><h3>Estrés y Clima</h3><p>Calor extremo, degradación química del EPP y límite de clima (lluvia, viento).</p><span class="chip high">P×S = 6 - Alto</span></div>
+      <div class="card green"><span class="icon">💪</span><h3>Sobreesfuerzo</h3><p>Postura forzada y manejo de cargas.</p><span class="chip ok">P×S = 4 - Moderado</span></div>
+      <div class="card red"><span class="icon">🦺</span><h3>EPP y Anclaje</h3><p>Evitar anclajes inferiores y el efecto pendular (anclar siempre por encima).</p><span class="chip crit">P×S = 9 - Crítico</span></div>
+    </div>
+    <div style="height:15px"></div>
+    <div class="meta" style="margin-top:15px; justify-content:flex-start;">
+      <div>Módulo A2: Peligros</div>
+      <div style="color:var(--amber)">⏱️ Tiempo: 10 min (1:00 - 1:10)</div>
+    </div>
+  </div>
+  <div class="decor">10</div>
+</section>
+
+<section class="slide" data-note="No se encontraron estadísticas exactas confiables en los PDFs locales; se presenta el dato como criterio de prevención.">
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content">
+    <div class="kicker">Contexto: por qué importa</div>
+    <h2>Casos Reales y Estadísticas</h2>
+    <div class="rule"></div>
+    <div class="two">
+      <div>
+        <div style="font-family:'Barlow Condensed';font-size:118px;font-weight:800;color:var(--gold);line-height:.8">95%</div>
+        <p style="font-size:28px;color:var(--off-white);margin-top:16px">de los accidentes por trabajo en altura son prevenibles cuando existe análisis de riesgo, PTS, supervisión y EPP inspeccionado.</p>
+        <p style="font-size:16px;margin-top:18px">Dato usado como criterio preventivo de capacitación; no sustituye estadísticas oficiales de la empresa o autoridad.</p>
+        <div class="meta" style="margin-top:15px; justify-content:flex-start;">
+          <div>Módulo A2: Contexto</div>
+          <div style="color:var(--amber)">⏱️ Tiempo: 8 min (1:10 - 1:18)</div>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card red"><h3>1. Volcadura de escalera</h3><p>Sin sujeción, ángulo incorrecto o base inestable.</p></div>
+        <div class="card amber"><h3>2. Rotura de superficie</h3><p>Láminas, cubiertas y techos sin refuerzo.</p></div>
+        <div class="card gold"><h3>3. Falla del EPP</h3><p>Falta de inspección, incompatibilidad o anclaje improvisado.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="decor">11</div>
+</section>
+
+<section class="slide" data-note="El error más común es implementar solo EPP. La norma exige analizar controles de mayor eficacia antes de depender del arnés.">
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content">
+    <div class="kicker">Control del riesgo</div>
+    <h2>Jerarquía de Controles</h2>
+    <div class="rule"></div>
+    <div class="pyramid">
+      <div class="level l1"><strong>Eliminación</strong><span>¿Puede hacerse sin subir? Rediseñar la tarea.</span></div>
+      <div class="level l2"><strong>Sustitución</strong><span>Plataforma elevadora, extensión telescópica, drones de inspección.</span></div>
+      <div class="level l3"><strong>Ingeniería</strong><span>Barandal certificado, red, línea de vida fija, plataforma de trabajo.</span></div>
+      <div class="level l4"><strong>Administrativo</strong><span>PTS, permiso, capacitación, señalización, delimitación y supervisión.</span></div>
+      <div class="level l5"><strong>EPP</strong><span>Última barrera: arnés, línea de vida, casco y conectores.</span></div>
+    </div>
+  </div>
+  <div class="decor">12</div>
+</section>
+
+<section class="slide" data-note="Dividir al grupo en breakout rooms. Cada equipo identificará peligros en la foto y propondrá un control. Compartir Miro/Jamboard en chat.">
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content">
+    <div class="kicker">Actividad Práctica - Módulo A2</div>
+    <h2>🎯 Dinámica: Breakout AR</h2>
+    <div class="rule"></div>
+    <div class="two">
+      <div class="card gold">
+        <h3>Instrucciones</h3>
+        <ul class="check" style="gap:10px;">
+          <li>Dividirse en equipos y abrir el Jamboard/Miro.</li>
+          <li>Analizar la foto de obra asignada.</li>
+          <li>Identificar al menos 3 peligros específicos.</li>
+          <li>Calcular el riesgo (P×S) y proponer una jerarquía de controles.</li>
+          <li>Presentar conclusiones al regresar al grupo principal (2 min).</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-family:'Barlow Condensed';font-size:88px;color:var(--gold);font-weight:800;line-height:.9">⏱ 10</div>
+        <p style="font-size:30px;color:var(--off-white);margin-top:8px">minutos (1:18 - 1:28)</p>
+        <div class="linkbox" style="margin-top:24px;">
+          <a href="https://jamboard.google.com" target="_blank" style="color:var(--gold-light); text-decoration:none; font-size:24px;">Abrir Pizarra Jamboard/Miro ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="decor">13</div>
+</section>
+
+<section class="slide center" data-note="Brindar descanso de 10 min. Mientras tanto, motivar al debate mediante la pregunta en el chat.">
+  <div class="bg-dots"></div><div class="orb gold"></div>
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content center">
+    <div class="kicker">Pausa Activa</div>
+    <h2>🔵 BREAK 1: Descanso Activo</h2>
+    <div class="rule" style="margin-left:auto;margin-right:auto"></div>
+    <div class="big-quote">
+      Toma un respiro y comparte en el chat de Meet: <br>
+      <span class="highlight" style="font-size:32px;">"¿Cuál es el mayor peligro en altura que has visto en tu trabajo?"</span>
+    </div>
+    <div style="height:30px"></div>
+    <div class="meta">
+      <div>Actividad: Descanso + Reflexión</div>
+      <div style="color:var(--amber)">⏱️ Tiempo: 10 min (1:30 - 1:40)</div>
+    </div>
+  </div>
+  <div class="decor">14</div>
+</section>
+
+<section class="slide" data-note="Pregunta clave: ¿Cuál sistema usar depende de qué? Depende del espacio libre inferior, del borde y de la tarea.">
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content">
+    <div class="kicker">Sistemas personales - Módulo A3</div>
+    <h2>Los 4 Sistemas SPPC</h2>
+    <div class="rule"></div>
+    <div class="grid g2">
+      <div class="card green"><h3>01 - Restricción</h3><p>Impide alcanzar el borde. No detiene una caída iniciada.</p></div>
+      <div class="card gold"><h3>02 - Posicionamiento</h3><p>Mantiene al trabajador estable con manos libres. Requiere respaldo contra caída.</p></div>
+      <div class="card red"><h3>03 - Detención de caída</h3><p>Arnés + absorbedor. Controla distancia total y requiere espacio libre inferior.</p></div>
+      <div class="card blue"><h3>04 - Salvamento y rescate</h3><p>Recuperación del trabajador suspendido. Debe estar definido antes de iniciar.</p></div>
+    </div>
+    <div style="height:15px"></div>
+    <div class="meta" style="margin-top:15px; justify-content:flex-start;">
+      <div>Módulo A3: Sistemas SPPC</div>
+      <div style="color:var(--amber)">⏱️ Tiempo: 10 min (1:40 - 1:50)</div>
+    </div>
+  </div>
+  <div class="decor">15</div>
+</section>
+
+<section class="slide" data-note="Mostrar físicamente o en cámara un arnés si se tiene disponible. Recalcar argolla dorsal.">
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content two">
+    <div>
+      <div class="kicker">Numeral 8 - EPP</div>
+      <h2>EPP Obligatorio</h2>
+      <div class="rule"></div>
+      <ul class="check" style="gap:10px;">
+        <li><b>Arnés de cuerpo completo:</b> ajuste correcto. Inspección obligatoria previa a cada uso.</li>
+        <li><b>Línea de vida con absorbedor:</b> ganchos de doble seguro. Prohibidos cables metálicos cerca de electricidad.</li>
+        <li><b>Puntos de anclaje seguros:</b> siempre por encima del nivel del hombro/cabeza para evitar el efecto pendular y limitar caída.</li>
+        <li><b>Casco Tipo II con barboquejo:</b> dieléctrico obligatorio en zonas con riesgo de arco eléctrico.</li>
+        <li><b>Calzado y guantes:</b> dieléctricos y de alta resistencia según el análisis previo de sitio.</li>
+      </ul>
+      <div class="warning" style="margin-top:14px; padding:12px 20px;"><p style="color:#ffaaaa;font-weight:600;font-size:16px;">Anclaje inferior = riesgo crítico de impacto por efecto péndulo o elongación de línea.</p></div>
+      <div style="height:10px"></div>
+      <div class="meta" style="margin-top:10px; justify-content:flex-start; font-size:16px;">
+        <div style="padding: 8px 15px; min-width: 150px;">Módulo A3: EPP</div>
+        <div style="color:var(--amber); padding: 8px 15px; min-width: 150px;">⏱️ 10 min (1:50 - 2:00)</div>
+      </div>
+    </div>
+    <div class="harness">
+      <svg viewBox="0 0 640 640" role="img">
+        <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#C9A961"/></marker></defs>
+        <circle cx="310" cy="92" r="48" fill="none" stroke="#f0f4f8" stroke-width="8"/>
+        <path d="M310 142v190M226 188l84 54 88-54M246 258h128M270 332l-42 160M350 332l48 160M226 492h92M365 492h82" fill="none" stroke="#f0f4f8" stroke-width="14" stroke-linecap="round"/>
+        <path d="M310 158l-58 176M310 158l70 176M252 334h128M270 334l44 150M380 334l-46 150" fill="none" stroke="#2E8B57" stroke-width="9" stroke-linecap="round"/>
+        <circle cx="310" cy="155" r="13" fill="#C9A961"/>
+        <path d="M310 142C360 80 415 50 500 48" fill="none" stroke="#C9A961" stroke-width="6" stroke-dasharray="10 9"/>
+        <text x="392" y="55" fill="#C9A961" font-family="Barlow Condensed" font-size="24" font-weight="800">Línea de vida con absorbedor</text>
+        <line x1="396" y1="132" x2="325" y2="154" stroke="#C9A961" stroke-width="3" marker-end="url(#arrow)"/>
+        <text x="402" y="128" fill="#f0f4f8" font-family="Barlow" font-size="18">Argolla dorsal</text>
+        <line x1="120" y1="274" x2="250" y2="258" stroke="#C9A961" stroke-width="3" marker-end="url(#arrow)"/>
+        <text x="34" y="278" fill="#f0f4f8" font-family="Barlow" font-size="18">Hebillas ajustables</text>
+        <line x1="470" y1="408" x2="362" y2="400" stroke="#C9A961" stroke-width="3" marker-end="url(#arrow)"/>
+        <text x="474" y="414" fill="#f0f4f8" font-family="Barlow" font-size="18">Correas de pierna</text>
+      </svg>
+    </div>
+  </div>
+  <div class="decor">16</div>
+</section>
+
+<section class="slide" data-note="Compartir el enlace de lab_epp_montaje.html. Cada participante resolverá la secuencia interactiva de colocación de EPP en su pantalla.">
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content">
+    <div class="kicker">Actividad Práctica - Módulo A3</div>
+    <h2>🔬 Laboratorio EPP: Lab de montaje contra reloj</h2>
+    <div class="rule"></div>
+    <div class="two">
+      <div class="card gold">
+        <h3>Colocación correcta en 15 pasos</h3>
+        <p>Ajusta el arnés interactivo en el orden técnico correcto. La secuencia incorrecta o saltearse un paso activará advertencias de seguridad.</p>
+        <ul class="check" style="margin-top:14px; gap:8px;">
+          <li>Inspección visual de costuras y herrajes</li>
+          <li>Sujeción dorsal y ajuste de hombros</li>
+          <li>Conexión de perneras y ajuste de pecho</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-family:'Barlow Condensed';font-size:88px;color:var(--gold);font-weight:800;line-height:.9">⏱ 25</div>
+        <p style="font-size:30px;color:var(--off-white);margin-top:8px">minutos (2:00 - 2:25)</p>
+        <div class="linkbox" style="margin-top:24px;">
+          <a href="../../simuladores/laboratorios/lab_epp_montaje.html" target="_blank" style="color:var(--gold-light); text-decoration:none; font-size:24px;">Abrir Laboratorio EPP ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="decor">17</div>
+</section>
+
+<section class="slide center" data-note="Quiz formativo de 5 preguntas sobre EPP y sistemas SPPC.">
+  <div class="bg-dots"></div><div class="orb green"></div>
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content center">
+    <div class="kicker">Evaluación Formativa</div>
+    <h2>⚡ Quiz Formativo A3: EPP y SPPC</h2>
+    <div class="rule"></div>
+    <p>Responde las 5 preguntas acerca del uso del arnés, absorbedor, cálculo de espacio libre y anclajes.</p>
+    <div style="height:30px"></div>
+    <div class="meta">
+      <div>Actividad: Quiz A3</div>
+      <div style="color:var(--amber)">⏱️ Tiempo: 5 min (2:25 - 2:30)</div>
+      <div>5 Preguntas</div>
+    </div>
+    <div class="linkbox" style="margin-top:40px; max-width:600px;">
+      <a href="../../examenes/evaluaciones_formativas/quiz_alturas.html?module=A3" target="_blank" style="color:var(--gold-light); text-decoration:none;">Iniciar Quiz A3 ↗</a>
+    </div>
+  </div>
+  <div class="decor">18</div>
+</section>
+
+<section class="slide" data-note="Conectar con el procedimiento: revisión médica, permiso, análisis previo, EPP, delimitación, bloqueo, riesgo eléctrico.">
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content">
+    <div class="kicker">Condiciones de seguridad - Módulo A4</div>
+    <h2>Plan de Trabajo Seguro</h2>
+    <div class="rule"></div>
+    <div class="grid process">
+      <div class="card green">
+        <h3>Antes</h3>
+        <ul style="gap:8px; font-size:16px;">
+          <li>Elaborar AR y PTS detallados.</li>
+          <li><b>Autorización por escrito (7.2):</b> validar trabajador, ubicación, medidas, fecha/hora y firmas autógrafas.</li>
+          <li>Verificar anclajes certificados y condición médica (equilibrio/cardio).</li>
+          <li>Activar plan y equipo de rescate.</li>
+        </ul>
+      </div>
+      <div class="card gold">
+        <h3>Durante (Supervisión)</h3>
+        <ul style="gap:8px; font-size:16px;">
+          <li><b>Andamios (Cap. 9):</b> bases firmes, plataforma ≥45cm, barandales 90cm, rodapié 15cm, relación base-altura 1:4 y tarjeta de estado.</li>
+          <li><b>Plataformas (Cap. 11):</b> canastilla 90cm (no cadenas), descenso de emergencia activo y 2do trabajador asistente visual.</li>
+          <li><b>Límite de clima:</b> detención ante lluvia, viento o tormenta.</li>
+          <li>Delimitar zona inferior y supervisión.</li>
+        </ul>
+      </div>
+      <div class="card blue">
+        <h3>Después</h3>
+        <ul style="gap:8px; font-size:16px;">
+          <li>Cerrar PTS y permisos firmados.</li>
+          <li>Registrar incidentes y lecciones.</li>
+          <li>Limpieza, inspección de EPP.</li>
+          <li>Archivar registros (mín. 1 año para STPS).</li>
+        </ul>
+      </div>
+    </div>
+    <div style="height:15px"></div>
+    <div class="meta" style="margin-top:15px; justify-content:flex-start;">
+      <div>Módulo A4: PTS</div>
+      <div style="color:var(--amber)">⏱️ Tiempo: 10 min (2:20 - 2:30)</div>
+    </div>
+  </div>
+  <div class="decor">19</div>
+</section>
+
+<section class="slide" data-note="Estos documentos son los que revisará un inspector. Si no están, no hay evidencia de cumplimiento.">
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content">
+    <div class="kicker">Cumplimiento normativo documental</div>
+    <h2>Documentos Obligatorios</h2>
+    <div class="rule"></div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Documento</th>
+          <th>Numeral</th>
+          <th>Frecuencia</th>
+          <th>Responsable</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Análisis de Riesgo (AR)</td>
+          <td>9.1</td>
+          <td>Por tipo de trabajo</td>
+          <td>Patrón / Consultor</td>
+        </tr>
+        <tr>
+          <td>Plan de Trabajo Seguro (PTS)</td>
+          <td>9.2</td>
+          <td>Antes de cada trabajo</td>
+          <td>Responsable del trabajo</td>
+        </tr>
+        <tr>
+          <td>Permiso de Trabajo en Altura</td>
+          <td>9.3</td>
+          <td>Antes de cada trabajo</td>
+          <td>Patrón o representante</td>
+        </tr>
+        <tr>
+          <td>Plan de Rescate</td>
+          <td>9.8</td>
+          <td>Antes de cada trabajo</td>
+          <td>Patrón</td>
+        </tr>
+        <tr>
+          <td>DC-3 capacitación</td>
+          <td>5.9</td>
+          <td>Por trabajador capacitado</td>
+          <td>Patrón + instructor</td>
+        </tr>
+        <tr>
+          <td>Inspección de EPP</td>
+          <td>8.6</td>
+          <td>Antes de uso y periódica</td>
+          <td>Responsable SST</td>
+        </tr>
+        <tr>
+          <td>Mantenimiento de anclajes</td>
+          <td>8.4</td>
+          <td>Programado o tras evento</td>
+          <td>Responsable SST</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="note-gold" style="margin-top:22px">Sin documentos = sin cumplimiento. Sin cumplimiento = riesgo legal + humano.</div>
+  </div>
+  <div class="decor">20</div>
+</section>
+
+<section class="slide" data-note="Explicar las reglas del juego: identificar en pantalla qué EPP son defectuosos y cuáles aprobar. El tiempo es crítico.">
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content">
+    <div class="kicker">Actividad Gamificada - Módulo A4</div>
+    <h2>🏆 Competencia de Inspección de EPP</h2>
+    <div class="rule"></div>
+    <div class="two">
+      <div class="card gold">
+        <h3>Juego de Inspección contra reloj</h3>
+        <p>Analiza fotos y modelos 3D de 10 equipos de protección (arneses, absorbedores, conectores). Identifica defectos (costuras deshilachadas, corrosión, deformaciones) y decide cuáles rechazar de inmediato.</p>
+        <span class="chip crit" style="margin-top:15px; display:inline-block">Juego interactivo por puntos</span>
+      </div>
+      <div>
+        <div style="font-family:'Barlow Condensed';font-size:88px;color:var(--gold);font-weight:800;line-height:.9">⏱ 20</div>
+        <p style="font-size:30px;color:var(--off-white);margin-top:8px">minutos (2:30 - 2:50)</p>
+        <div class="linkbox" style="margin-top:24px;">
+          <a href="../../simuladores/inspeccion/competencia_inspeccion.html" target="_blank" style="color:var(--gold-light); text-decoration:none; font-size:24px;">Abrir Competencia EPP ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="decor">21</div>
+</section>
+
+<section class="slide center" data-note="Dar descanso de 10 min. Indicar a los participantes que accedan a menti.com para formar la nube de palabras.">
+  <div class="bg-dots"></div><div class="orb gold"></div>
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content center">
+    <div class="kicker">Pausa de Integración</div>
+    <h2>🔵 BREAK 2: Descanso (Mentimeter)</h2>
+    <div class="rule" style="margin-left:auto;margin-right:auto"></div>
+    <div class="big-quote">
+      Ingresa a <span class="highlight">menti.com</span> y responde:<br>
+      <span class="highlight" style="font-size:32px;">"¿Qué EPP nunca olvidarías después del día de hoy?"</span>
+    </div>
+    <div style="height:30px"></div>
+    <div class="meta">
+      <div>Actividad: Nube de palabras interactiva</div>
+      <div style="color:var(--amber)">⏱️ Tiempo: 10 min (2:50 - 3:00)</div>
+    </div>
+  </div>
+  <div class="decor">22</div>
+</section>
+
+<section class="slide" data-note="Este es el momento de impacto: insistir en que el plan de rescate no es un anexo, es una condición de inicio.">
+  <div class="orb gold"></div>
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content">
+    <div class="kicker" style="color:#ff8c8c">Punto crítico - Módulo A5: Rescate</div>
+    <h2>Síndrome de Arnés</h2>
+    <div class="rule"></div>
+    <div class="warning">
+      <h3 style="font-family:'Barlow Condensed';font-size:38px;color:#ffaaaa;margin-bottom:8px">SÍNDROME DE SUSPENSIÓN EN ARNÉS</h3>
+      <p style="font-size:28px;color:var(--white);font-weight:500">Un trabajador suspendido inmóvil puede morir en 5 a 30 minutos sin rescate.</p>
+      <p style="margin-top:12px">Las correas comprimen vasos femorales, la sangre se acumula en piernas, el retorno venoso se bloquea y puede ocurrir colapso repentino.</p>
+    </div>
+    <div class="timeline">
+      <div class="timepoint"><strong>0 min</strong><span>Suspendido</span></div>
+      <div class="timepoint"><strong>5 min</strong><span>Mareo, palidez</span></div>
+      <div class="timepoint"><strong>15 min</strong><span>Objetivo de rescate</span></div>
+      <div class="timepoint"><strong>30 min</strong><span>Alto riesgo</span></div>
+      <div class="timepoint"><strong>30+ min</strong><span>Daño grave</span></div>
+    </div>
+    <ul class="check" style="grid-template-columns:repeat(4,1fr);gap:18px">
+      <li>Activar rescate inmediatamente</li>
+      <li>No bajar bruscamente</li>
+      <li>Posición semisentado</li>
+      <li>Valoración médica siempre</li>
+    </ul>
+  </div>
+  <div class="decor">23</div>
+</section>
+
+<section class="slide" data-note="Explicar las 3 funciones clave en el equipo de rescate y los 5 pasos ordenados del protocolo de salvamento.">
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content">
+    <div class="kicker">Plan de Emergencias - Módulo A5</div>
+    <h2>Protocolo de Rescate: 5 Pasos y Roles</h2>
+    <div class="rule"></div>
+    <div class="two">
+      <div class="card gold">
+        <h3>Roles del Equipo de Rescate</h3>
+        <ul style="gap:10px;">
+          <li><b>👮 Vigía:</b> Detecta la caída de inmediato, evalúa peligros de la escena y mantiene contacto visual y verbal con la víctima.</li>
+          <li><b>📞 Comunicador:</b> Activa el Plan de Emergencias interno y llama a los servicios de rescate externos detallando el estado de salud.</li>
+          <li><b>🦺 Rescatista:</b> Personal calificado con DC-3 que opera los equipos de descenso y recuperación del suspendido.</li>
+        </ul>
+      </div>
+      <div class="card green">
+        <h3>Los 5 Pasos de Respuesta</h3>
+        <ol style="display:grid; gap:8px; padding-left:20px; font-size:18px; color:var(--off-white);">
+          <li><b>1. Evaluar la escena:</b> Asegurar que no hay peligros adicionales para el rescatista.</li>
+          <li><b>2. Alerta y enlace:</b> Activar respuesta médica y brigadas de rescate.</li>
+          <li><b>3. Estabilización:</b> Indicar a la víctima usar cintas de trauma para aliviar presión.</li>
+          <li><b>4. Descenso controlado:</b> Bajar a la víctima lentamente usando descensor mecánico.</li>
+          <li><b>5. Posición semisentada:</b> Colocar en cuclillas/sentado en el suelo. ¡Nunca acostado!</li>
+        </ol>
+      </div>
+    </div>
+    <div style="height:8px"></div>
+    <div class="note-gold" style="font-size:15px; padding:10px 18px; margin-bottom:10px;">
+      <b>Soporte Crítico:</b> Examen médico anual obligatorio (Cap. 14) para equilibrio, cardio y acrofobia. Botiquín especializado obligatorio (Guía Ref. II) clasificado en material Seco, Líquido, Instrumental e Inmovilizador de trauma.
+    </div>
+    <div class="meta" style="margin-top:8px; justify-content:flex-start;">
+      <div>Módulo A5: Protocolo</div>
+      <div style="color:var(--amber)">⏱️ Tiempo: 10 min (3:10 - 3:20)</div>
+    </div>
+  </div>
+  <div class="decor">24</div>
+</section>
+
+<section class="slide" data-note="Asignar los roles de trabajador suspendido y rescatista. Cronometrar la ejecución verbal del protocolo de 5 pasos.">
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content">
+    <div class="kicker">Actividad Práctica - Módulo A5</div>
+    <h2>🚨 Dinámica: Simulación de Rescate (Roleplay)</h2>
+    <div class="rule"></div>
+    <div class="two">
+      <div class="card gold">
+        <h3>Roleplay en cámara</h3>
+        <p>Los participantes asumen los roles de trabajador suspendido y rescatista para simular la comunicación y protocolo de rescate ante síndrome de arnés.</p>
+        <ul class="check" style="margin-top:14px; gap:8px;">
+          <li>Aplicar el protocolo verbal de 5 pasos</li>
+          <li>Asignar roles y tiempos críticos (≤15 min)</li>
+          <li>Verificar la posición semisentado</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-family:'Barlow Condensed';font-size:88px;color:var(--gold);font-weight:800;line-height:.9">⏱ 10</div>
+        <p style="font-size:30px;color:var(--off-white);margin-top:8px">minutos (3:20 - 3:30)</p>
+        <div class="linkbox" style="margin-top:24px; font-size: 18px;">
+          Guión: <code>actividades/guion_rescate.md</code>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="decor">25</div>
+</section>
+
+<section class="slide center" data-note="Hacer clic para iniciar el Quiz A5. Son 5 preguntas sobre rescate y síndrome de arnés.">
+  <div class="bg-dots"></div><div class="orb green"></div>
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content center">
+    <div class="kicker">Evaluación Formativa</div>
+    <h2>⚡ Quiz Formativo A5: Rescate y Trauma</h2>
+    <div class="rule"></div>
+    <p>Responde las 5 preguntas sobre el protocolo de rescate, tiempos de respuesta y manejo médico del trauma por suspensión.</p>
+    <div style="height:30px"></div>
+    <div class="meta">
+      <div>Actividad: Quiz A5</div>
+      <div style="color:var(--amber)">⏱️ Tiempo: 5 min (3:20 - 3:30)</div>
+      <div>5 Preguntas</div>
+    </div>
+    <div class="linkbox" style="margin-top:40px; max-width:600px;">
+      <a href="../../examenes/evaluaciones_formativas/quiz_alturas.html?module=A5" target="_blank" style="color:var(--gold-light); text-decoration:none;">Iniciar Quiz A5 ↗</a>
+    </div>
+  </div>
+  <div class="decor">26</div>
+</section>
+
+<section class="slide" data-note="Hacer lectura rápida de los puntos que los alumnos deben dominar antes del simulador final.">
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content">
+    <div class="kicker">Lo que deben llevarse hoy</div>
+    <h2>Resumen y Puntos Clave</h2>
+    <div class="rule"></div>
+    <div class="grid g2">
+      <div class="card gold"><h3>🎯 1.8 m</h3><p>Todo trabajo con riesgo de caída libre activa la NOM-009-STPS-2011.</p></div>
+      <div class="card green"><h3>📝 PTS y Firmas</h3><p>Ningún trabajo inicia sin PTS firmado, autorización por escrito (7.2) y supervisión activa.</p></div>
+      <div class="card blue"><h3>🏗️ Jerarquía</h3><p>Controles preventivos que van desde eliminación hasta el uso de EPP certificado.</p></div>
+      <div class="card red"><h3>⏱️ 15 min</h3><p>Tiempo límite de rescate para prevenir el síndrome de suspensión en arnés.</p></div>
+      <div class="card gold"><h3>🦺 Supervisión</h3><p>Estabilidad de andamios (relación 1:4), plataformas (sin cuerdas/cadenas, vigía secundario) y EPP.</p></div>
+      <div class="card green"><h3>📂 Evidencia</h3><p>103 indicadores de cumplimiento. Sin documentos físicos = sin cumplimiento defendible.</p></div>
+    </div>
+  </div>
+  <div class="decor">27</div>
+</section>
+
+<section class="slide" data-note="Explicar las instrucciones del simulador. Cada equipo elabora y exporta su AR en formato PDF.">
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content">
+    <div class="kicker">Evaluación Práctica - 20 minutos</div>
+    <h2>⚙️ Simulador Isométrico de Análisis de Riesgo</h2>
+    <div class="rule"></div>
+    <div class="two">
+      <div class="card gold">
+        <h3>Instrucciones</h3>
+        <ul class="check">
+          <li>Ingresen al simulador isométrico.</li>
+          <li>Analicen el escenario en 3D (ductos a 4.5 m).</li>
+          <li>Identifiquen peligros y asocien controles preventivos.</li>
+          <li>Calculen la matriz de riesgo resultante.</li>
+          <li>Generen y descarguen el reporte PDF de evidencia.</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-family:'Barlow Condensed';font-size:88px;color:var(--gold);font-weight:800;line-height:.9">⏱ 20</div>
+        <p style="font-size:30px;color:var(--off-white);margin-top:8px">minutos (3:33 - 3:53)</p>
+        <div class="linkbox" style="margin-top:24px;">
+          <a href="../../simuladores/analisis_riesgo/simulador_integrado.html" target="_blank" style="color:var(--gold-light); text-decoration:none; font-size:24px;">Abrir Simulador ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="decor">28</div>
+</section>
+
+<section class="slide center" data-note="Hacer clic en el enlace para iniciar el examen final teórico de 20 preguntas.">
+  <div class="bg-dots"></div><div class="orb red"></div>
+  <img class="logo small" data-logo alt="Vértice EHS">
+  <div class="content center">
+    <div class="kicker">Evaluación Final</div>
+    <h2>📋 Examen Final de Alturas</h2>
+    <div class="rule" style="margin-left:auto;margin-right:auto"></div>
+    <p>Evaluación teórica final de 20 preguntas de opción múltiple para acreditar el curso NOM-009 Trabajos en Altura.</p>
+    <div style="height:30px"></div>
+    <div class="meta">
+      <div>Actividad: Examen Teórico</div>
+      <div style="color:var(--amber)">⏱️ Tiempo: 35 min (3:53 - 4:00+)</div>
+      <div>20 Preguntas</div>
+    </div>
+    <div class="linkbox" style="margin-top:40px; max-width:600px;">
+      <a href="../../examenes/evaluaciones_formativas/examen_final_alturas.html" target="_blank" style="color:var(--gold-light); text-decoration:none;">Iniciar Examen Final ↗</a>
+    </div>
+  </div>
+  <div class="decor">29</div>
+</section>
+
+<section class="slide center" data-note="Cerrar la sesión de capacitación, resolver dudas y dar las gracias a los participantes.">
+  <div class="bg-dots"></div><div class="orb green"></div><div class="orb gold"></div>
+  <img class="logo" data-logo alt="Vértice EHS">
+  <div style="height:36px"></div>
+  <h1 style="font-size:76px">¡Gracias por su participación!</h1>
+  <div class="rule" style="margin-left:auto;margin-right:auto"></div>
+  <p style="font-style:italic;color:var(--off-white)">“La seguridad no es un gasto - es la única inversión que siempre da rendimientos.”</p>
+  <div class="meta">
+    <div>+52 222 459 6850</div>
+    <div>ozwaldo379@gmail.com</div>
+    <div>NOM-009-STPS-2011</div>
+  </div>
+  <div class="badge" style="margin-top:32px">Vértice EHS · 2026</div>
+  <div class="decor">30</div>
+</section>
 </div>
-<div id="nav"><button class="navbtn" id="prevBtn">‹</button><span id="counter">Slide 1 de 18</span><button class="navbtn" id="nextBtn">›</button></div>
+<div id="nav"><button class="navbtn" id="prevBtn">‹</button><span id="counter">Slide 1 de 30</span><button class="navbtn" id="nextBtn">›</button></div>
 <div id="notes"><strong>Notas del instructor</strong><div id="noteText"></div></div>
 <div id="overview" class="overlay"><h2>Vista general</h2><div id="overviewGrid"></div></div>
 <div id="help" class="overlay"><div class="helpbox"><h2>Atajos</h2><ul><li><span>Anterior / siguiente</span><span class="key">← → Space</span></li><li><span>Pantalla completa</span><span class="key">F</span></li><li><span>Notas del instructor</span><span class="key">P</span></li><li><span>Temporizador</span><span class="key">T</span></li><li><span>Vista general</span><span class="key">O</span></li><li><span>Ayuda</span><span class="key">H / ?</span></li><li><span>Cerrar overlay</span><span class="key">Esc</span></li></ul></div></div>
