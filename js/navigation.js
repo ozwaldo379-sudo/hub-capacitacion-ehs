@@ -63,7 +63,8 @@ const navigation = {
 
     const validViews = ['dashboard', 'participants', 'exam', 'reports', 'docs'];
     if (!validViews.includes(viewName)) {
-      hash = 'dashboard';
+      window.location.hash = '#dashboard';
+      return;
     }
 
     this.activeView = viewName;

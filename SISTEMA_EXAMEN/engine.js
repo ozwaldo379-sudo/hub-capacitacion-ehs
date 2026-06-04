@@ -661,6 +661,7 @@ const examEngine = {
       const newRecord = {
         id: "exam_" + Date.now(),
         participantId: this.state.participantId || this.state.activeEngineer,
+        participantName: this.state.activeEngineer,
         examDate: new Date().toISOString(),
         totalTimeSeconds: Math.round((Date.now() - this.state.startTime) / 1000),
         averageTimePerQuestion: this.calculateAverageTime(),

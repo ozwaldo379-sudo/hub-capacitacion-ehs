@@ -155,9 +155,19 @@ const participantManager = {
       let hasChanges = false;
 
       this.state.participants.forEach(p => {
-        // Find most recent completed exam for this participant by matching ID
+        // Find most recent completed exam for this participant by matching ID or Name (case-insensitive)
         const match = examDb
-          .filter(record => record.participantId === p.id)
+          .filter(record => {
+            if (record.participantId === p.id) return true;
+            
+            const recordName = record.participantName || record.participantId;
+            if (recordName && p.nombre) {
+              const cleanPName = p.nombre.toLowerCase().replace(/^(ing\.|lic\.)\s+/i, '').trim();
+              const cleanRName = recordName.toLowerCase().replace(/^(ing\.|lic\.)\s+/i, '').trim();
+              if (cleanPName === cleanRName) return true;
+            }
+            return false;
+          })
           .sort((a, b) => new Date(b.examDate) - new Date(a.examDate))[0];
 
         if (match) {
@@ -189,10 +199,22 @@ const participantManager = {
     const p = this.getParticipant(id);
     if (p) {
       try {
-        // Remove exam records matching participant's ID from exam db
+        // Remove exam records matching participant's ID or Name from exam db
         const rawDb = localStorage.getItem(EXAM_DB_KEY) || "[]";
         let examDb = JSON.parse(rawDb);
-        examDb = examDb.filter(record => record.participantId !== p.id);
+        
+        examDb = examDb.filter(record => {
+          if (record.participantId === p.id) return false;
+          
+          const recordName = record.participantName || record.participantId;
+          if (recordName && p.nombre) {
+            const cleanPName = p.nombre.toLowerCase().replace(/^(ing\.|lic\.)\s+/i, '').trim();
+            const cleanRName = recordName.toLowerCase().replace(/^(ing\.|lic\.)\s+/i, '').trim();
+            if (cleanPName === cleanRName) return false;
+          }
+          return true;
+        });
+
         localStorage.setItem(EXAM_DB_KEY, JSON.stringify(examDb));
 
         p.examen_score = null;

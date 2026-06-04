@@ -255,7 +255,7 @@ const app = {
         const seconds = record.totalTimeSeconds % 60;
         
         tr.innerHTML = `
-          <td><strong>${record.participantId}</strong></td>
+          <td><strong>${record.participantName || record.participantId}</strong></td>
           <td>${formattedDate}</td>
           <td style="${scoreClass}; font-weight: 800; font-family: var(--font-mono)">${record.score}%</td>
           <td><span class="badge ${record.aprobado ? 'status-success' : 'status-blocked'}">${record.aprobado ? 'Aprobado' : 'Reprobado'}</span></td>
@@ -465,6 +465,46 @@ const app = {
       participantManager.resetExamForParticipant(participantId);
       this.showToast({ type: 'warning', message: 'Examen restablecido. El participante puede tomarlo de nuevo.' });
       this.render();
+    }
+  },
+
+  // Decode and import a shared exam result record from base64 string
+  importExamCode() {
+    const input = document.getElementById('import-exam-code-input');
+    if (!input || !input.value.trim()) {
+      this.showToast({ type: 'warning', message: 'Por favor, ingrese un código de examen válido.' });
+      return;
+    }
+
+    const code = input.value.trim();
+    try {
+      const decoded = decodeURIComponent(escape(atob(code)));
+      const record = JSON.parse(decoded);
+
+      if (!record.id || !record.participantId || typeof record.score !== 'number') {
+        throw new Error('Formato de código inválido.');
+      }
+
+      const rawDb = localStorage.getItem('ehs_exam_database') || "[]";
+      const db = JSON.parse(rawDb);
+
+      if (db.some(r => r.id === record.id)) {
+        this.showToast({ type: 'info', message: 'Este resultado de examen ya estaba registrado en el Hub.' });
+        input.value = '';
+        return;
+      }
+
+      db.push(record);
+      localStorage.setItem('ehs_exam_database', JSON.stringify(db));
+
+      participantManager.syncWithExamDatabase();
+      this.render();
+
+      this.showToast({ type: 'success', message: '¡Examen importado y sincronizado con éxito!' });
+      input.value = '';
+    } catch (e) {
+      console.error('Error importing exam:', e);
+      this.showToast({ type: 'error', message: 'El código de examen ingresado no es válido o está dañado.' });
     }
   },
 

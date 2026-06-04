@@ -565,7 +565,7 @@ const EHSReportGenerator = {
       const statusLabel = record.aprobado ? "APROBADO" : "REFORZAR";
 
       tr.innerHTML = `
-        <td><strong>${record.participantId}</strong></td>
+        <td><strong>${record.participantName || record.participantId}</strong></td>
         <td>${date}</td>
         <td>${record.score}%</td>
         <td><span class="admin-status-badge ${statusClass}">${statusLabel}</span></td>

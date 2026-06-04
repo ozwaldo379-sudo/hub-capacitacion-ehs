@@ -1599,6 +1599,7 @@
       <div class="results-actions">
         <button class="btn-primary" onclick="EHSReportGenerator.downloadRecordPDF('current_exam_download')">📥 Guardar PDF Completo</button>
         <button class="btn-secondary" onclick="shareOnLinkedInClick()">🔗 Compartir Badge en LinkedIn</button>
+        <button class="btn-secondary" onclick="copyShareCodeClick()" style="background: rgba(58, 175, 109, 0.15); border-color: var(--green-light); color: var(--green-light)">📋 Copiar Código de Resultado</button>
         <button class="btn-secondary" onclick="btnResetExamClick()">🔄 Nueva Evaluación</button>
       </div>
     </div>
@@ -2464,6 +2465,29 @@
       document.getElementById("resumeModal").classList.add("hidden");
       localStorage.removeItem("ehs_exam_state");
       pendingSavedState = null;
+    }
+
+    function copyShareCodeClick() {
+      try {
+        const rawDb = localStorage.getItem("ehs_exam_database") || "[]";
+        const db = JSON.parse(rawDb);
+        if (db.length === 0) {
+          alert("No se encontró ningún resultado de examen.");
+          return;
+        }
+        const lastRecord = db[db.length - 1];
+        const jsonStr = JSON.stringify(lastRecord);
+        const encoded = btoa(unescape(encodeURIComponent(jsonStr)));
+        
+        navigator.clipboard.writeText(encoded).then(() => {
+          alert("¡Código de resultado copiado al portapapeles! Envíalo a tu facilitador por WhatsApp o correo.");
+        }).catch(err => {
+          prompt("Su navegador no soporta copiado automático. Copie este código manualmente:", encoded);
+        });
+      } catch (e) {
+        console.error("Error al copiar código de resultado:", e);
+        alert("Error al generar el código de resultado.");
+      }
     }
 
     // Iniciar auto-save checker al arrancar
