@@ -68,10 +68,11 @@ const examEngine = {
   /**
    * Inicializa un examen desde cero basado en el perfil del participante
    */
-  startNewExam(engineerName, simulatorScoreVal) {
+  startNewExam(engineerId, engineerName, simulatorScoreVal) {
     const score = parseInt(simulatorScoreVal) || 0;
     this.state = {
       activeEngineer: engineerName,
+      participantId: engineerId,
       simulatorScore: score,
       currentQuestion: null,
       currentQuestionIndex: 0,
@@ -659,7 +660,7 @@ const examEngine = {
       
       const newRecord = {
         id: "exam_" + Date.now(),
-        participantId: this.state.activeEngineer,
+        participantId: this.state.participantId || this.state.activeEngineer,
         examDate: new Date().toISOString(),
         totalTimeSeconds: Math.round((Date.now() - this.state.startTime) / 1000),
         averageTimePerQuestion: this.calculateAverageTime(),

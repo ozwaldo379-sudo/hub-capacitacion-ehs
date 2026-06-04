@@ -1707,7 +1707,8 @@
           if (state && state.participants) {
             state.participants.forEach((p, index) => {
               const option = document.createElement("option");
-              option.value = p.nombre;
+              option.value = p.id;
+              option.dataset.name = p.nombre;
               option.textContent = `${p.nombre} (Participante ${index === 0 ? 'A' : index === 1 ? 'B' : index + 1})`;
               
               // Calculate average of active simulator scores
@@ -1756,6 +1757,7 @@
     function btnStartExamClick() {
       const select = document.getElementById("selectEngineer");
       const manualBox = document.getElementById("manualProfileBox");
+      let engineerId = "custom_" + Date.now();
       let name = "";
       let score = 70; // score predeterminado para medio
 
@@ -1775,8 +1777,9 @@
         name = customName;
         score = parseInt(customScore) || 70;
       } else {
-        name = select.value;
+        engineerId = select.value;
         const selectedOption = select.options[select.selectedIndex];
+        name = selectedOption.dataset.name || engineerId;
         if (selectedOption && selectedOption.dataset.score) {
           score = parseInt(selectedOption.dataset.score) || 75;
         } else {
@@ -1791,7 +1794,7 @@
         }
       }
 
-      examEngine.startNewExam(name, score);
+      examEngine.startNewExam(engineerId, name, score);
     }
 
     // Modal Admin Login togglers

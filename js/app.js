@@ -100,7 +100,29 @@ const app = {
           examTag.textContent = `${passText} (${p.examen_score}%)`;
         }
       }
+
+      // Update reset panel names
+      const resetNameEl = document.getElementById(`reset-p${num}-name`);
+      if (resetNameEl) resetNameEl.textContent = p.nombre || `Ingeniero ${num}`;
     });
+
+    // Update Console Active Engineer Select
+    const consoleSelect = document.getElementById('console-active-engineer-select');
+    if (consoleSelect) {
+      const selectedValue = consoleSelect.value;
+      consoleSelect.innerHTML = '';
+      participants.forEach(p => {
+        const option = document.createElement('option');
+        option.value = p.id;
+        option.textContent = p.nombre || p.id;
+        if (p.id === selectedValue) option.selected = true;
+        consoleSelect.appendChild(option);
+      });
+      // Fallback if previous selection is no longer valid
+      if (!consoleSelect.value && participants.length > 0) {
+        consoleSelect.value = participants[0].id;
+      }
+    }
 
     // 2. Render Participants tab grid
     this.renderParticipantsTab();
@@ -117,6 +139,9 @@ const app = {
     const listContainer = document.getElementById('participants-list-container');
     if (!listContainer) return;
 
+    // Do not re-render and wipe inputs if user is currently typing
+    if (listContainer.contains(document.activeElement)) return;
+
     const participants = participantManager.getParticipants();
     listContainer.innerHTML = '';
 
@@ -129,7 +154,7 @@ const app = {
 
       card.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-          <h3 style="font-size: 1.6rem; color: var(--color-accent-light);"><span style="font-size: 2.2rem; vertical-align: middle; margin-right: 8px;">👤</span> ${p.nombre}</h3>
+          <h3 style="font-size: 1.6rem; color: var(--color-accent-light);"><span style="vertical-align: middle; margin-right: 8px;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> ${p.nombre}</h3>
           <span class="badge ${progressVal === 100 ? 'status-success' : 'status-progress'}" style="font-size: 0.85rem; padding: 6px 12px;">
             ${progressVal === 100 ? 'COMPLETADO' : 'EN CURSO'}
           </span>
@@ -167,7 +192,9 @@ const app = {
         </div>
 
         <div style="display: flex; justify-content: flex-end; gap: 12px;">
-          <button class="btn btn-secondary btn-save-profile" data-id="${p.id}" style="width: auto;">💾 Guardar Cambios</button>
+          <button class="btn btn-primary btn-save-profile" data-id="${p.id}" style="width: auto;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar Cambios
+          </button>
         </div>
       `;
 
@@ -195,6 +222,10 @@ const app = {
         });
 
         this.showToast({ type: 'success', message: `Perfil de ${nameVal} guardado con éxito` });
+        
+        // Remove focus so renderParticipantsTab updates the UI
+        if (document.activeElement) document.activeElement.blur();
+        
         this.render();
       });
     });

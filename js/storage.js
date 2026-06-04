@@ -155,9 +155,9 @@ const participantManager = {
       let hasChanges = false;
 
       this.state.participants.forEach(p => {
-        // Find most recent completed exam for this participant by matching name
+        // Find most recent completed exam for this participant by matching ID
         const match = examDb
-          .filter(record => record.participantId === p.nombre)
+          .filter(record => record.participantId === p.id)
           .sort((a, b) => new Date(b.examDate) - new Date(a.examDate))[0];
 
         if (match) {
@@ -189,10 +189,10 @@ const participantManager = {
     const p = this.getParticipant(id);
     if (p) {
       try {
-        // Remove exam records matching participant's name from exam db
+        // Remove exam records matching participant's ID from exam db
         const rawDb = localStorage.getItem(EXAM_DB_KEY) || "[]";
         let examDb = JSON.parse(rawDb);
-        examDb = examDb.filter(record => record.participantId !== p.nombre);
+        examDb = examDb.filter(record => record.participantId !== p.id);
         localStorage.setItem(EXAM_DB_KEY, JSON.stringify(examDb));
 
         p.examen_score = null;

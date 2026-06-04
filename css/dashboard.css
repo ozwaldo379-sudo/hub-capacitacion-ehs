@@ -259,15 +259,30 @@
 
 /* Glassmorphism Cards */
 .glass-card {
-  background: var(--color-bg-card);
+  background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   border-radius: var(--border-radius);
   padding: 24px;
   box-shadow: var(--shadow-md);
-  backdrop-filter: blur(8px);
-  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
   position: relative;
   overflow: hidden;
+}
+
+.glass-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glass-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .glass-card:hover {
@@ -703,6 +718,7 @@
   left: -150px;
   top: -150px;
   background: radial-gradient(circle, var(--color-accent-glow), transparent 70%);
+  animation: driftOrb1 15s ease-in-out infinite alternate;
 }
 
 .glow-orb.orb-2 {
@@ -711,6 +727,7 @@
   right: -200px;
   bottom: -200px;
   background: radial-gradient(circle, var(--color-success-glow), transparent 70%);
+  animation: driftOrb2 20s ease-in-out infinite alternate;
 }
 
 .grid-overlay {
